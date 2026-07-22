@@ -17,4 +17,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8000
 
-CMD ["sh", "debug"]
+CMD ["sh", "debug.sh"]
