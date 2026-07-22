@@ -1,0 +1,10 @@
+So the workflow is roughly something like.
+
+- Client Booking. (Client registers their vehicle with garage)
+- Assessment Report (Mechanics produce an assessment of the car issues. What's broken, what requires replacement, what's the severity (critical, e.t.c))
+- Client approves the assessment report - Assessment Report approval / assessment is marked as client approved.
+- Mechanic produces a Quotation. Parts, labour, e.t.c. All the items from the assessment report should appear here. Each line item will have labour + part costs.
+- Client will then approve the quotation, which will produce a WorkOrder. A work order will contain which mechanic(s) is assigned to that task.
+- Once the car is done, the client will sign a release document, and take their car.
+
+

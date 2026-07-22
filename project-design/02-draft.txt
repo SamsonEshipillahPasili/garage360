@@ -1,0 +1,95 @@
+                    CLIENT
+                       |
+                       |
+                 1. Booking
+                       |
+                       |
+               Vehicle Check-in
+                       |
+                       |
+              2. Assessment Report
+            (Diagnosis of the vehicle)
+                       |
+                - Faults found
+                - Severity
+                - Recommendations
+                - Parts required
+                - Photos (optional)
+                       |
+                       |
+             Client approves diagnosis?
+                    /        \
+                  No          Yes
+                  |            |
+                Close      Continue
+                  |            |
+                  +------------+
+                               |
+                               |
+                    3. Quotation / Estimate
+                         (Commercial)
+                               |
+                     - Parts costs
+                     - Labour costs
+                     - Taxes
+                     - Expected duration
+                     - Valid until date
+                               |
+                               |
+                  Client approves quotation?
+                           /       \
+                         No         Yes
+                         |            |
+                       Close          |
+                                      |
+                               4. Work Order
+                           (Internal document)
+                                      |
+                            - Assigned mechanic(s)
+                            - Tasks to perform
+                            - Deadlines
+                            - Status tracking
+                                      |
+                                      |
+                             IN PROGRESS
+                                      |
+                                      |
+                               QUALITY CHECK
+                                      |
+                                      |
+                            Vehicle ready?
+                                      |
+                                      |
+                                     Yes
+                                      |
+                                      |
+                            5. Final Invoice
+                         (May equal quotation or
+                          include approved changes)
+                                      |
+                                      |
+                                Payment
+                                      |
+                                      |
+                          6. Vehicle Release Form
+                                      |
+                           - Vehicle received
+                           - No visible damages
+                           - Signature of client
+                           - Date & time collected
+                                      |
+                                      |
+                                 COMPLETED
+                                 
+                                
+                                
+| Document             | Purpose                        | Client Approval? |
+| -------------------- | ------------------------------ | ---------------- |
+| Booking              | Vehicle registration/check-in  | No               |
+| Assessment Report    | What's wrong with the vehicle  | Yes              |
+| Quotation            | How much it will cost          | Yes              |
+| Work Order           | Internal execution document    | No               |
+| Invoice              | Payment document               | Yes (payment)    |
+| Vehicle Release Form | Confirms collection of vehicle | Yes              |
+                                
+                                
