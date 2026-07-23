@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class TimestampedModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -7,12 +8,9 @@ class TimestampedModel(models.Model):
     class Meta:
         abstract = True
 
-
 class Client(TimestampedModel):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
-    email = models.EmailField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class Vehicle(TimestampedModel):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
