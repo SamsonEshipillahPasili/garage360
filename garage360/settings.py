@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'accounts',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -128,4 +129,4 @@ LOGIN_URL = reverse_lazy('accounts:login')
 
 LOGOUT_REDIRECT_URL = reverse_lazy('accounts:login')
 
-LOGIN_REDIRECT_URL = reverse_lazy('accounts:index')
+LOGIN_REDIRECT_URL = reverse_lazy('core:index')
