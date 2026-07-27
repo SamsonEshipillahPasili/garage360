@@ -1,0 +1,4 @@
+Test User credentials
+---
+Username: admin
+Password: rf$Awe1tg0900P1#
