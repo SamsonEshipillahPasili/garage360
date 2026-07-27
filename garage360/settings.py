@@ -34,6 +34,10 @@ ALLOWED_HOSTS = [
     'localhost',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://web.garage360.orb.local',
+]
+
 
 # Application definition
 
@@ -46,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'core',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -63,7 +69,9 @@ ROOT_URLCONF = 'garage360.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,3 +138,7 @@ LOGIN_URL = reverse_lazy('accounts:login')
 LOGOUT_REDIRECT_URL = reverse_lazy('accounts:login')
 
 LOGIN_REDIRECT_URL = reverse_lazy('core:index')
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
