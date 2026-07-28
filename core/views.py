@@ -1,9 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView, FormView, ListView
 from django.urls import reverse_lazy
 from django.contrib import messages
 
-import logzero
 
 from .forms import CreateClientForm
 from .models import Client
@@ -23,3 +22,12 @@ class CreateClientView(LoginRequiredMixin, FormView):
         )
         messages.info(self.request, 'Client created successfully')
         return super().form_valid(form)
+
+
+class ListClientsView(LoginRequiredMixin, ListView):
+    template_name = 'core/list_clients.html'
+    context_object_name = 'clients'
+
+    def get_queryset(self):
+        return Client.objects.select_related('user').all()
+

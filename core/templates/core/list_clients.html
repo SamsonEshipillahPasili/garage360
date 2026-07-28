@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+<div>
+    <h2 class="mt-4">List Clients</h2>
+    <table class="table table-striped table-bordered table-sm">
+        <thead>
+        <tr>
+            <th>Client ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone Number</th>
+            <th>Email</th>
+            <th>Is Password Set</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for client in clients %}
+        <tr>
+            <td>{{ client.id }}</td>
+            <td>{{ client.user.first_name }}</td>
+            <td>{{ client.user.last_name }}</td>
+            <td>{{ client.phone_number }}</td>
+            <td>{{ client.user.email }}</td>
+            <td>
+                {% if client.is_password_set %}  Yes  {% else %}  No {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
