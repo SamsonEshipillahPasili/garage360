@@ -12,7 +12,6 @@ class IndexView(LoginRequiredMixin, TemplateView):
     template_name = 'core/index.html'
 
 class CreateClientView(LoginRequiredMixin, FormView):
-    template_name = 'core/create_client.html'
     form_class = CreateClientForm
     success_url = reverse_lazy('core:list_clients')
 
