@@ -31,7 +31,7 @@ class ClientManager(models.Manager):
             )
 
             # then create the client
-            return Client.objects.create(user=user, phone=phone)
+            return Client.objects.create(user=user, phone_number=phone)
 
 
 class Client(TimestampedModel):

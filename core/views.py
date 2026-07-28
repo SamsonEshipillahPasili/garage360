@@ -6,6 +6,7 @@ from django.contrib import messages
 import logzero
 
 from .forms import CreateClientForm
+from .models import Client
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -17,6 +18,8 @@ class CreateClientView(LoginRequiredMixin, FormView):
     success_url = reverse_lazy('core:create_client')
 
     def form_valid(self, form: CreateClientForm):
-        logzero.logger.info(form.cleaned_data)
+        Client.objects.create_client(
+            **form.cleaned_data
+        )
         messages.info(self.request, 'Client created successfully')
         return super().form_valid(form)
