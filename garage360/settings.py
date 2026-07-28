@@ -15,6 +15,7 @@ from pathlib import Path
 import dj_database_url
 from decouple import config
 from django.urls import reverse_lazy
+from django.contrib.messages import constants as message_constants
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -142,3 +143,12 @@ LOGIN_REDIRECT_URL = reverse_lazy('core:index')
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+MESSAGE_TAGS = {
+    message_constants.DEBUG: 'alert-secondary',
+    message_constants.INFO: 'alert-info',
+    message_constants.SUCCESS: 'alert-success',
+    message_constants.WARNING: 'alert-warning',
+    message_constants.ERROR: 'alert-danger',
+}
+
