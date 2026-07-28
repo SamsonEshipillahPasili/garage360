@@ -14,7 +14,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
 class CreateClientView(LoginRequiredMixin, FormView):
     template_name = 'core/create_client.html'
     form_class = CreateClientForm
-    success_url = reverse_lazy('core:create_client')
+    success_url = reverse_lazy('core:list_clients')
 
     def form_valid(self, form: CreateClientForm):
         Client.objects.create_client(
@@ -30,4 +30,9 @@ class ListClientsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return Client.objects.select_related('user').all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['create_client_form'] = CreateClientForm()
+        return context
 
