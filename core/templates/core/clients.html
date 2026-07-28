@@ -45,6 +45,7 @@
             <th>Phone Number</th>
             <th>Email</th>
             <th>Is Password Set</th>
+            <th>Date Created</th>
         </tr>
         </thead>
         <tbody>
@@ -58,6 +59,7 @@
             <td>
                 {% if client.is_password_set %}  Yes  {% else %}  No {% endif %}
             </td>
+            <td>{{ client.created }}</td>
         </tr>
         {% endfor %}
         </tbody>
