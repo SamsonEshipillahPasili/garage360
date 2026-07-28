@@ -25,7 +25,7 @@ class CreateClientView(LoginRequiredMixin, FormView):
 
 
 class ListClientsView(LoginRequiredMixin, ListView):
-    template_name = 'core/list_clients.html'
+    template_name = 'core/clients.html'
     context_object_name = 'clients'
 
     def get_queryset(self):
