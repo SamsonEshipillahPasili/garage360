@@ -4,30 +4,83 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db import transaction
 
-class TimestampedModel(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
+##############################################
+# Managers                                   #
+##############################################
 
-    class Meta:
-        abstract = True
-
-class ClientManager(models.Manager):
-
-    def update_client(
-            self, instance: 'Client',  email: str, first_name: str, last_name: str, phone: str
-    ) -> 'Client':
-        with transaction.atomic():
-            instance.user.email = email
-            instance.user.first_name = first_name
-            instance.user.last_name = last_name
-            instance.user.save()
-
-            instance.phone_number = phone
-            instance.save()
-
+class UserProfileManager(models.Manager):
     def create_client(
-            self, email: str, first_name: str, last_name: str, phone: str
-    ) -> 'Client':
+          self,
+          organization: 'Organization',
+          email: str,
+          first_name: str,
+          last_name: str,
+          phone_number: str
+        ) -> 'UserProfile':
+
+        return self._create_profile(
+            organization=organization,
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            phone_number=phone_number,
+            is_admin=False,
+            is_staff=False,
+            is_client=True
+        )
+
+    def create_staff(
+            self,
+            organization: 'Organization',
+            email: str,
+            first_name: str,
+            last_name: str,
+            phone_number: str,
+    ) -> 'UserProfile':
+
+        return self._create_profile(
+            organization=organization,
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            phone_number=phone_number,
+            is_admin=False,
+            is_staff=True,
+            is_client=False
+        )
+
+    def create_admin(
+             self,
+             organization: 'Organization',
+             email: str,
+             first_name: str,
+             last_name: str,
+             phone_number: str,
+    ) -> 'UserProfile':
+
+        return self._create_profile(
+            organization=organization,
+            email=email,
+            first_name=first_name,
+            last_name=last_name,
+            phone_number=phone_number,
+            is_admin=True,
+            is_staff=False,
+            is_client=False
+        )
+
+    def _create_profile(
+            self,
+            organization: 'Organization',
+            email: str,
+            first_name: str,
+            last_name: str,
+            phone_number: str,
+            is_admin: bool,
+            is_staff: bool,
+            is_client: bool,
+    ) -> 'UserProfile':
+
         # open a transaction
         with transaction.atomic():
             # initial password
@@ -42,14 +95,40 @@ class ClientManager(models.Manager):
                 username=email,
             )
 
-            # then create the client
-            return Client.objects.create(user=user, phone_number=phone)
+            # then create the profile
+            return UserProfile.objects.create(
+                organization=organization,
+                user=user,
+                phone_number=phone_number,
+                is_admin=is_admin,
+                is_staff=is_staff,
+                is_client=is_client,
+            )
 
+##############################################
+# Models                                     #
+##############################################
 
-class Client(TimestampedModel):
-    phone_number = models.CharField(max_length=255)
+class TimestampedModel(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+class Organization(TimestampedModel):
+    name = models.CharField(max_length=255)
+
+class UserProfile(TimestampedModel):
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone_number = models.CharField(max_length=255)
     is_password_set = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
+    is_client = models.BooleanField(default=False)
+
+    objects = UserProfileManager()
 
     def set_password(self, password: str):
         """
@@ -63,13 +142,4 @@ class Client(TimestampedModel):
             self.user.set_password(password)
             self.user.save(update_fields=["password"])
             self.is_password_set = True
-            self.save()
-
-    objects = ClientManager()
-
-class Vehicle(TimestampedModel):
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    brand = models.CharField(max_length=255)
-    model = models.CharField(max_length=255)
-    yom = models.PositiveIntegerField()
-    number_plate = models.CharField(max_length=255)
+            self.save(update_fields=["password"])
