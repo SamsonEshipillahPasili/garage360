@@ -105,6 +105,23 @@ class UserProfileManager(models.Manager):
                 is_client=is_client,
             )
 
+    def update_profile(
+            self,
+            instance: 'UserProfile',
+            email: str,
+            first_name: str,
+            last_name: str,
+            phone_number: str
+    ):
+        with transaction.atomic():
+            instance.user.email = email
+            instance.user.first_name = first_name
+            instance.user.last_name = last_name
+            instance.user.save(update_fields=["email", "first_name", "last_name"])
+
+            instance.phone_number = phone_number
+            instance.save(update_fields=["phone_number"])
+
 ##############################################
 # Models                                     #
 ##############################################

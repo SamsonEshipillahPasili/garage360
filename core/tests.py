@@ -1,14 +1,14 @@
 import pytest
 
-from core.models import Client
-from core.models import User
 from faker import Faker
+from accounts.models import UserProfile
+from django.contrib.auth.models import User
 
 fake = Faker()
 
 @pytest.fixture
 def client_user(db):
-   return Client.objects.create_client(
+   return UserProfile.objects.create_client(
         email="client@gmail.com",
         first_name="CFName",
         last_name="CLName",
@@ -17,7 +17,7 @@ def client_user(db):
 
 @pytest.mark.django_db
 def test_can_correctly_create_client():
-    assert not Client.objects.exists()
+    assert not UserProfile.objects.exists()
     assert not User.objects.exists()
 
     email = "client@gmail.com"
@@ -25,7 +25,7 @@ def test_can_correctly_create_client():
     last_name = "CLName"
     phone = "+5757767676"
 
-    client = Client.objects.create_client(
+    client = UserProfile.objects.create_client(
         email=email,
         first_name=first_name,
         last_name=last_name,
@@ -42,13 +42,13 @@ def test_can_correctly_create_client():
     assert user.email == email
     assert user.username == email
 
-    assert Client.objects.count() == 1
+    assert UserProfile.objects.count() == 1
     assert User.objects.count() == 1
 
 
 @pytest.mark.django_db
 def test_client_password_is_set_correctly():
-    client = Client.objects.create_client(
+    client = UserProfile.objects.create_client(
         email=fake.email(),
         first_name=fake.first_name(),
         last_name=fake.last_name(),
@@ -75,7 +75,7 @@ def test_client_can_be_updated_correctly(client_user):
     assert new_client_data['email'] != client_user.user.email
     assert new_client_data['phone'] != client_user.phone_number
 
-    Client.objects.update_client(
+    UserProfile.objects.update_profile(
         instance=client_user,
         **new_client_data
     )
