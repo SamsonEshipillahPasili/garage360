@@ -13,6 +13,18 @@ class TimestampedModel(models.Model):
 
 class ClientManager(models.Manager):
 
+    def update_client(
+            self, instance: 'Client',  email: str, first_name: str, last_name: str, phone: str
+    ) -> 'Client':
+        with transaction.atomic():
+            instance.user.email = email
+            instance.user.first_name = first_name
+            instance.user.last_name = last_name
+            instance.user.save()
+
+            instance.phone_number = phone
+            instance.save()
+
     def create_client(
             self, email: str, first_name: str, last_name: str, phone: str
     ) -> 'Client':

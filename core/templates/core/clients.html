@@ -46,6 +46,9 @@
             <th>Email</th>
             <th>Is Password Set</th>
             <th>Date Created</th>
+            <th>
+                Actions
+            </th>
         </tr>
         </thead>
         <tbody>
@@ -60,6 +63,9 @@
                 {% if client.is_password_set %}  Yes  {% else %}  No {% endif %}
             </td>
             <td>{{ client.created }}</td>
+            <td>
+                <a href="{% url 'core:edit_client' pk=client.id %}" class="btn btn-sm btn-primary">Edit</a>
+            </td>
         </tr>
         {% endfor %}
         </tbody>
