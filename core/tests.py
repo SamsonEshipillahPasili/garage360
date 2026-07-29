@@ -49,13 +49,13 @@ def test_can_correctly_create_client():
 @pytest.mark.django_db
 def test_client_password_is_set_correctly():
     client = Client.objects.create_client(
-        email="client@gmail.com",
-        first_name="CFName",
-        last_name="CLName",
-        phone="+5757767676"
+        email=fake.email(),
+        first_name=fake.first_name(),
+        last_name=fake.last_name(),
+        phone=fake.phone_number(),
     )
     assert not client.is_password_set
-    new_password = "Test@12345"
+    new_password = fake.password(length=10)
     client.set_password(new_password)
     assert client.is_password_set
     assert client.user.check_password(new_password)
