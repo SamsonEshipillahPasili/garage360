@@ -138,7 +138,7 @@ class Organization(TimestampedModel):
 
 class UserProfile(TimestampedModel):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     phone_number = models.CharField(max_length=255)
     is_password_set = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)

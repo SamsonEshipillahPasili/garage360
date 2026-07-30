@@ -8,7 +8,7 @@ from django.contrib import messages
 
 
 from .forms import CreateClientForm
-from .models import Client
+from accounts.models import UserProfile
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -19,7 +19,8 @@ class CreateClientView(LoginRequiredMixin, FormView):
     success_url = reverse_lazy('core:list_clients')
 
     def form_valid(self, form: CreateClientForm):
-        Client.objects.create_client(
+        UserProfile.objects.create_client(
+            organization=self.user.profile.organization,
             **form.cleaned_data
         )
         messages.info(self.request, 'Client created successfully')
