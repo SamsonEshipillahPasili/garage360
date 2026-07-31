@@ -1,0 +1,14 @@
+{% load crispy_forms_tags %}
+
+<div id="create-profile-form-container">
+    <form method="post" action="{% url 'accounts:create_profile' %}" id="create-profile-form">
+      <div class="modal-body">
+          {% csrf_token %}
+          {{ profile_form|crispy }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="create-client-btn" class="btn btn-primary">Create Client</button>
+      </div>
+    </form>
+</div>

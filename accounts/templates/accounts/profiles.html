@@ -1,5 +1,5 @@
 {% extends 'app_shell.html' %}
-{% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
 
@@ -21,16 +21,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Add Client</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <form method="post" action="{% url 'accounts:create_profile' %}">
-                  <div class="modal-body">
-                      {% csrf_token %}
-                      {{ profile_form|crispy }}
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Create Client</button>
-                  </div>
-              </form>
+              {% include 'accounts/profile_form.html' %}
             </div>
           </div>
         </div>
@@ -72,4 +63,8 @@
     </table>
 </div>
 
+{% endblock %}
+
+{% block js %}
+  <script src="{% static 'accounts/js/accounts.js' %}" ></script>
 {% endblock %}

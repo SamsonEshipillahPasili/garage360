@@ -12,3 +12,4 @@ class UserProfileForm(forms.Form):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("Email is taken!")
+        return email
