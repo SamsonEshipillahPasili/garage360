@@ -4,11 +4,14 @@
     <form method="post" action="{% url 'accounts:create_profile' %}" id="create-profile-form">
       <div class="modal-body">
           {% csrf_token %}
+          <input type="hidden" name="is_staff" value="{{ is_staff }}" />
           {{ profile_form|crispy }}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" id="create-client-btn" class="btn btn-primary">Create Client</button>
+        <button type="button" id="create-client-btn" class="btn btn-primary">
+            Create {% if is_staff == 'true' %} Staff {% else %} Client {% endif %}
+        </button>
       </div>
     </form>
 </div>

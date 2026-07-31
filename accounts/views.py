@@ -42,11 +42,11 @@ class CreateUserProfileView(LoginRequiredMixin, FormView):
         context['profile_form'] = context['form']
         return context
 
-    def is_staff(self, form) -> bool:
-        return form.cleaned_data.get('is_staff') == 'true'
+    def is_staff(self) -> bool:
+        return self.request.POST.get('is_staff', 'false') == 'true'
 
     def form_valid(self, form: UserProfileForm):
-        if self.is_staff(form):
+        if self.is_staff():
             UserProfile.objects.create_staff(
                 organization=self.request.user.profile.organization,
                 **form.cleaned_data
@@ -57,10 +57,10 @@ class CreateUserProfileView(LoginRequiredMixin, FormView):
                 **form.cleaned_data
             )
 
-        entity = 'Staff' if self.is_staff(form) else 'Client'
+        entity = 'Staff' if self.is_staff() else 'Client'
         messages.info(self.request, f'{entity} created successfully')
         return HttpResponseRedirect(
-            reverse_lazy('accounts:list_profiles', query={'is_staff': True})
+            reverse_lazy('accounts:list_profiles', query={'is_staff': 'true'})
         )
 
 class ListProfilesView(LoginRequiredMixin, ListView):
@@ -88,6 +88,7 @@ class ListProfilesView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['profile_form'] = UserProfileForm()
         context['menu_item'] = 'staff' if self._is_staff() else 'clients'
+        context['is_staff'] = 'true' if self._is_staff() else 'false'
         return context
 
 class EditProfileView(LoginRequiredMixin, View):
