@@ -159,4 +159,4 @@ class UserProfile(TimestampedModel):
             self.user.set_password(password)
             self.user.save(update_fields=["password"])
             self.is_password_set = True
-            self.save(update_fields=["password"])
+            self.save(update_fields=["is_password_set"])

@@ -6,7 +6,4 @@ app_name = 'core'
 
 urlpatterns = [
     path('index', views.IndexView.as_view(), name='index'),
-    path('clients/create', views.CreateClientView.as_view(), name='create_client'),
-    path('clients', views.ListClientsView.as_view(), name='list_clients'),
-    path('clients/edit/<int:pk>', views.EditClientView.as_view(), name='edit_client'),
 ]

@@ -42,7 +42,7 @@ class CreateUserProfileView(LoginRequiredMixin, FormView):
             organization=self.user.profile.organization,
             **form.cleaned_data
         )
-        messages.info(self.request, 'Client created successfully')
+        messages.info(self.request, 'Profile created successfully')
         return super().form_valid(form)
 
 class ListProfilesView(LoginRequiredMixin, ListView):
@@ -90,7 +90,7 @@ class EditProfileView(LoginRequiredMixin, View):
             'client': client,
             'form': form,
         }
-        return render(request, 'accounts/user_profile.html', context)
+        return render(request, 'accounts/profile_detail.html', context)
 
     def post(self, request, pk: int):
         profile = get_object_or_404(self.get_queryset(), pk=pk)
@@ -101,12 +101,12 @@ class EditProfileView(LoginRequiredMixin, View):
                 'profile': profile,
                 'form': form,
             }
-            return render(request, 'core/user_profile.html', context)
+            return render(request, 'accounts/profile_detail.html', context)
 
         UserProfile.objects.update_profile(
             instance=profile,
             **form.cleaned_data,
         )
-        messages.info(self.request, 'Client updated successfully')
+        messages.info(self.request, 'Profile updated successfully')
         return HttpResponseRedirect(reverse_lazy('accounts:profiles'))
 

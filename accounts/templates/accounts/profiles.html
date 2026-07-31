@@ -1,13 +1,13 @@
-{% extends 'base.html' %}
+{% extends 'app_shell.html' %}
 {% load crispy_forms_tags %}
 
-{% block body %}
+{% block content %}
 
 <div>
 
-    <h2 class="mt-4">List Clients</h2>
+    <h2 class="mt-4">List Profiles</h2>
 
-    {% include 'core/partials/alerts.html' %}
+    {% include 'partials/alerts.html' %}
 
     <div>
         <div class="d-flex justify-content-end mb-3">
@@ -21,7 +21,7 @@
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Add Client</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-              <form method="post" action="{% url 'core:create_client' %}">
+              <form method="post" action="{% url 'accounts:create_profile' %}">
                   <div class="modal-body">
                       {% csrf_token %}
                       {{ create_client_form|crispy }}
@@ -39,7 +39,7 @@
     <table class="table table-striped table-bordered table-sm">
         <thead>
         <tr>
-            <th>Client ID</th>
+            <th>Profile ID</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Phone Number</th>
@@ -52,19 +52,19 @@
         </tr>
         </thead>
         <tbody>
-        {% for client in clients %}
+        {% for profile in profiles %}
         <tr>
-            <td>{{ client.id }}</td>
-            <td>{{ client.user.first_name }}</td>
-            <td>{{ client.user.last_name }}</td>
-            <td>{{ client.phone_number }}</td>
-            <td>{{ client.user.email }}</td>
+            <td>{{ profile.id }}</td>
+            <td>{{ profile.user.first_name }}</td>
+            <td>{{ profile.user.last_name }}</td>
+            <td>{{ profile.phone_number }}</td>
+            <td>{{ profile.user.email }}</td>
             <td>
-                {% if client.is_password_set %}  Yes  {% else %}  No {% endif %}
+                {% if profile.is_password_set %}  Yes  {% else %}  No {% endif %}
             </td>
-            <td>{{ client.created }}</td>
+            <td>{{ profile.created }}</td>
             <td>
-                <a href="{% url 'core:edit_client' pk=client.id %}" class="btn btn-sm btn-primary">Edit</a>
+                <a href="{% url 'accounts:edit_profile' pk=profile.id %}" class="btn btn-sm btn-primary">Edit</a>
             </td>
         </tr>
         {% endfor %}
