@@ -1,14 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'app_shell.html' %}
 
 {% load crispy_forms_tags %}
 
-{% block body %}
+{% block content %}
 
-<div>
+<div class="container">
 
     <h2 class="mt-4">Client Details</h2>
 
-    {% include 'core/partials/alerts.html' %}
+    {% include 'partials/alerts.html' %}
 
     <form method="post">
       {% csrf_token %}
