@@ -5,20 +5,20 @@
 
 <div class="container">
 
-    <h2 class="mt-4">List Clients</h2>
+    <h2 class="mt-4">List {% if menu_item == 'clients' %} Clients {% else %} Staff {% endif %}</h2>
 
     {% include 'partials/alerts.html' %}
 
     <div>
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#add-client-modal">Add Client</button>
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#add-client-modal">Add {% if menu_item == 'clients' %} Client {% else %} Staff {% endif %}</button>
         </div>
 
         <div class="modal fade" id="add-client-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Client</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add {% if menu_item == 'clients' %} Client {% else %} Staff {% endif %}</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               {% include 'accounts/profile_form.html' %}
