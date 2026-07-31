@@ -35,24 +35,37 @@ class AuthLoginView(LoginView):
 
 class CreateUserProfileView(LoginRequiredMixin, FormView):
     form_class = UserProfileForm
-    success_url = reverse_lazy('accounts:list_profiles')
 
     def form_valid(self, form: UserProfileForm):
-        UserProfile.objects.create_client(
-            organization=self.request.user.profile.organization,
-            **form.cleaned_data
-        )
-        messages.info(self.request, 'Profile created successfully')
-        return super().form_valid(form)
+        is_staff = form.cleaned_data.get('is_staff', 'true') == 'true'
+
+        if is_staff:
+            UserProfile.objects.create_staff(
+                organization=self.request.user.profile.organization,
+                **form.cleaned_data
+            )
+        else:
+            UserProfile.objects.create_client(
+                organization=self.request.user.profile.organization,
+                **form.cleaned_data
+            )
+
+        entity = 'Staff' if is_staff else 'Client'
+        messages.info(self.request, f'{entity} created successfully')
+        return reverse_lazy('accounts:list_profiles', query={'is_staff': True})
 
 class ListProfilesView(LoginRequiredMixin, ListView):
     template_name = 'accounts/profiles.html'
     context_object_name = 'profiles'
 
     def get_queryset(self):
+        is_staff = self.request.GET.get('is_staff', 'false') == 'true'
+        filter_ = {'is_staff': True} if is_staff else {'is_client': True}
+
         return (
             UserProfile.objects
             .filter(
+                **filter_,
                 organization=self.request.user.profile.organization
             )
             .select_related('user')
