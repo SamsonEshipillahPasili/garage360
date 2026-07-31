@@ -11,7 +11,7 @@
 
     <div>
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#add-client-modal">Add Client</button>
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#add-client-modal">Add Profile</button>
         </div>
 
         <div class="modal fade" id="add-client-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -24,7 +24,7 @@
               <form method="post" action="{% url 'accounts:create_profile' %}">
                   <div class="modal-body">
                       {% csrf_token %}
-                      {{ create_client_form|crispy }}
+                      {{ profile_form|crispy }}
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

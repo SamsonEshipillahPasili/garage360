@@ -35,11 +35,11 @@ class AuthLoginView(LoginView):
 
 class CreateUserProfileView(LoginRequiredMixin, FormView):
     form_class = UserProfileForm
-    success_url = reverse_lazy('accounts:list_users')
+    success_url = reverse_lazy('accounts:list_profiles')
 
     def form_valid(self, form: UserProfileForm):
         UserProfile.objects.create_client(
-            organization=self.user.profile.organization,
+            organization=self.request.user.profile.organization,
             **form.cleaned_data
         )
         messages.info(self.request, 'Profile created successfully')
