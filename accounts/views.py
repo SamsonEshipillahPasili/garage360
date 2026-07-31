@@ -37,7 +37,7 @@ class CreateUserProfileView(LoginRequiredMixin, FormView):
     form_class = UserProfileForm
 
     def form_valid(self, form: UserProfileForm):
-        is_staff = form.cleaned_data.get('is_staff', 'true') == 'true'
+        is_staff = form.cleaned_data.get('is_staff') == 'true'
 
         if is_staff:
             UserProfile.objects.create_staff(
@@ -52,7 +52,9 @@ class CreateUserProfileView(LoginRequiredMixin, FormView):
 
         entity = 'Staff' if is_staff else 'Client'
         messages.info(self.request, f'{entity} created successfully')
-        return reverse_lazy('accounts:list_profiles', query={'is_staff': True})
+        return HttpResponseRedirect(
+            reverse_lazy('accounts:list_profiles', query={'is_staff': True})
+        )
 
 class ListProfilesView(LoginRequiredMixin, ListView):
     template_name = 'accounts/profiles.html'
