@@ -118,6 +118,7 @@ class EditProfileView(LoginRequiredMixin, View):
         profile = get_object_or_404(self.get_queryset(), pk=pk)
 
         form = UserProfileForm(request.POST, request.FILES)
+        form.set_instance(profile)
         if not form.is_valid():
             context = {
                 'profile': profile,
@@ -130,5 +131,4 @@ class EditProfileView(LoginRequiredMixin, View):
             **form.cleaned_data,
         )
         messages.info(self.request, 'Profile updated successfully')
-        return HttpResponseRedirect(reverse_lazy('accounts:profiles'))
-
+        return HttpResponseRedirect(reverse_lazy('accounts:list_profiles'))
