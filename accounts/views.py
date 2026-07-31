@@ -67,8 +67,11 @@ class ListProfilesView(LoginRequiredMixin, ListView):
     template_name = 'accounts/profiles.html'
     context_object_name = 'profiles'
 
+    def _is_staff(self) -> bool:
+        return self.request.GET.get('is_staff', 'false') == 'true'
+
     def get_queryset(self):
-        is_staff = self.request.GET.get('is_staff', 'false') == 'true'
+        is_staff = self._is_staff()
         filter_ = {'is_staff': True} if is_staff else {'is_client': True}
 
         return (
@@ -84,6 +87,7 @@ class ListProfilesView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['profile_form'] = UserProfileForm()
+        context['menu_item'] = 'staff' if self._is_staff() else 'clients'
         return context
 
 class EditProfileView(LoginRequiredMixin, View):

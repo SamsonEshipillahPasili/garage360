@@ -201,7 +201,7 @@
               <li class="nav-item">
                 <a
                   href="{% url 'accounts:list_profiles' %}"
-                  class="nav-link active"
+                  class="nav-link {% if menu_item == 'clients' %} active {% endif %}"
                   aria-current="page">
                   <svg
                     class="bi pe-none me-2"
@@ -217,7 +217,7 @@
               <li class="nav-item">
                 <a
                   href="{% url 'accounts:list_profiles'%}?is_staff=true"
-                  class="nav-link"
+                  class="nav-link {% if menu_item == 'staff' %} active {% endif %}"
                   aria-current="page">
                   <svg
                     class="bi pe-none me-2"
