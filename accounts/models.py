@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.db import transaction
+from utils.models import TimestampedModel
 
 ##############################################
 # Managers                                   #
@@ -126,12 +127,7 @@ class UserProfileManager(models.Manager):
 # Models                                     #
 ##############################################
 
-class TimestampedModel(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
 
-    class Meta:
-        abstract = True
 
 class Organization(TimestampedModel):
     name = models.CharField(max_length=255)

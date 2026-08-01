@@ -2,8 +2,9 @@ from django.db import models
 from django.utils import timezone
 
 from accounts.models import UserProfile
+from utils.models import TimestampedModel
 
-class Booking(models.Model):
+class Booking(TimestampedModel):
     # the client for the booking
     user_profile = models.ForeignKey(
         UserProfile,
@@ -24,8 +25,3 @@ class Booking(models.Model):
         on_delete=models.CASCADE,
         related_name='staff_bookings'
     )
-
-    # model metadata
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
-
