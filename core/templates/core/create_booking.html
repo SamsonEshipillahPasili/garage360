@@ -1,0 +1,33 @@
+{% extends 'app_shell.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container">
+
+    <h1 class="mt-4">Book Vehicle</h1>
+
+    <h2 class="mt-4">User Details #{{ profile.id }}</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Phone Number</th>
+            <th scope="col">Email</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ profile.user.first_name }}</td>
+            <td>{{ profile.user.last_name }}</td>
+            <td>{{ profile.phone_number }}</td>
+            <td>{{ profile.user.email }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}
