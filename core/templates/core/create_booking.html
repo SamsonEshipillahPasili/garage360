@@ -28,6 +28,52 @@
         </tbody>
     </table>
 
+    <div>
+        <h2 class="mt-4">Booking Details</h2>
+        <form>
+            {{ booking_form|crispy }}
+            <button class="btn btn-success" type="submit">Create Booking</button>
+        </form>
+    </div>
+
+    <div>
+        <h2 class="mt-4">Booking History</h2>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">ID#</th>
+                <th scope="col">Booking Date</th>
+                <th scope="col">Car Brand</th>
+                <th scope="col">Car Model</th>
+                <th scope="col">Car Number Plate</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>12</td>
+                <td>12/02/2026</td>
+                <td>Audi</td>
+                <td>SQ5</td>
+                <td>KDN 6681</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>12/02/2026</td>
+                <td>Audi</td>
+                <td>SQ5</td>
+                <td>KDN 6681</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>12/02/2026</td>
+                <td>Audi</td>
+                <td>SQ5</td>
+                <td>KDN 6681</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
 {% endblock %}
