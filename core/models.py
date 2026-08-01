@@ -1,22 +1,31 @@
-# from django.db import models
-# from django.utils import timezone
-#
-# from accounts.models import UserProfile
-#
-# class Diagnostic(models.Model):
-#     ...
-#
-# class Booking(models.Model):
-#     user_profile = models.ForeignKey(
-#         UserProfile,
-#         on_delete=models.CASCADE,
-#         related_name='bookings'
-#     )
-#     car_brand = models.CharField(max_length=255)
-#     car_model = models.CharField(max_length=255)
-#     car_yom = models.CharField(max_length=255)
-#     car_number_plate = models.CharField(max_length=255)
-#     booking_date = models.DateField(default=timezone.now)
-#     created = models.DateTimeField(auto_now_add=True)
-#     modified = models.DateTimeField(auto_now=True)
-#
+from django.db import models
+from django.utils import timezone
+
+from accounts.models import UserProfile
+
+class Booking(models.Model):
+    # the client for the booking
+    user_profile = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        related_name='bookings'
+    )
+
+    # The car to be booked in the garage.
+    car_brand = models.CharField(max_length=255)
+    car_model = models.CharField(max_length=255)
+    car_yom = models.CharField(max_length=255)
+    car_number_plate = models.CharField(max_length=255)
+
+    # booking metadata
+    booking_date = models.DateField(default=timezone.now)
+    booked_by = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        related_name='staff_bookings'
+    )
+
+    # model metadata
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
