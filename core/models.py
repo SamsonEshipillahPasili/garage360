@@ -6,7 +6,7 @@ from utils.models import TimestampedModel
 
 class Booking(TimestampedModel):
     # the client for the booking
-    user_profile = models.ForeignKey(
+    client = models.ForeignKey(
         UserProfile,
         on_delete=models.CASCADE,
         related_name='bookings'
