@@ -20,7 +20,7 @@ class Booking(TimestampedModel):
 
     # booking metadata
     booking_date = models.DateField(default=timezone.now)
-    booked_by = models.ForeignKey(
+    created_by = models.ForeignKey(
         UserProfile,
         on_delete=models.CASCADE,
         related_name='staff_bookings'
