@@ -5,11 +5,23 @@ from accounts.models import UserProfile
 from utils.models import TimestampedModel
 
 class Booking(TimestampedModel):
+    class BookingStatus(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        IN_PROGRESS = 'in_progress', 'In Progress'
+        DONE = 'done', 'Done'
+
     # the client for the booking
     client = models.ForeignKey(
         UserProfile,
         on_delete=models.CASCADE,
         related_name='bookings'
+    )
+
+    # the status of the booking
+    status = models.CharField(
+        max_length=20,
+        choices=BookingStatus.choices,
+        default=BookingStatus.PENDING
     )
 
     # The car to be booked in the garage.
