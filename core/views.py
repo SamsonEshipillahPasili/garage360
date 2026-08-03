@@ -18,6 +18,9 @@ class IndexView(LoginRequiredMixin, TemplateView):
 
 class CreateBookingView(LoginRequiredMixin, View):
 
+    def _get_template_name(self) -> str:
+        return 'core/create_booking.html'
+
     def _get_user_profile_qs(self, request: HttpRequest) -> QuerySet:
         return (
             UserProfile.objects
@@ -37,7 +40,7 @@ class CreateBookingView(LoginRequiredMixin, View):
             'profile': user_profile,
             'booking_form': booking_form,
         }
-        return render(request, 'core/create_booking.html', context)
+        return render(request, self._get_template_name(), context)
 
     def post(self, request: HttpRequest, profile_id: int):
         qs = self._get_user_profile_qs(request=request)
@@ -59,4 +62,4 @@ class CreateBookingView(LoginRequiredMixin, View):
                 'profile': user_profile,
                 'booking_form': booking_form,
             }
-            return render(request, 'core/create_booking.html', context)
+            return render(request, self._get_template_name(), context)
