@@ -1,14 +1,35 @@
-from django.db import models
+from typing import Dict, Any
+
+from django.db import models, transaction
 from django.utils import timezone
 
 from accounts.models import UserProfile
 from utils.models import TimestampedModel
+
+
+class BookingManager(models.Manager):
+
+    def create_booking(
+            self,
+            client: UserProfile,
+            created_by: UserProfile,
+            data: Dict[str, Any]
+    ) -> 'Booking':
+        with transaction.atomic():
+            booking = self.create(client=client, created_by=created_by, **data)
+            Quotation.objects.create(
+                booking=booking,
+            )
+            return booking
 
 class Booking(TimestampedModel):
     class BookingStatus(models.TextChoices):
         PENDING = 'pending', 'Pending'
         IN_PROGRESS = 'in_progress', 'In Progress'
         DONE = 'done', 'Done'
+
+    # custom manager
+    objects = BookingManager()
 
     # the client for the booking
     client = models.ForeignKey(
@@ -42,7 +63,7 @@ class Booking(TimestampedModel):
 class Quotation(TimestampedModel):
     booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name='quotation')
     is_approved = models.BooleanField(default=False)
-    approved_at = models.DateTimeField()
+    approved_at = models.DateTimeField(null=True, blank=True)
 
 class QuotationLine(TimestampedModel):
     quotation = models.ForeignKey(Quotation, on_delete=models.CASCADE, related_name='quotation_lines')
