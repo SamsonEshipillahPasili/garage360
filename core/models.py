@@ -25,3 +25,16 @@ class Booking(TimestampedModel):
         on_delete=models.CASCADE,
         related_name='staff_bookings'
     )
+
+
+class Quotation(TimestampedModel):
+    booking = models.OneToOneField(Booking, on_delete=models.CASCADE, related_name='quotation')
+    is_approved = models.BooleanField(default=False)
+    approved_at = models.DateTimeField()
+
+class QuotationLine(TimestampedModel):
+    quotation = models.ForeignKey(Quotation, on_delete=models.CASCADE, related_name='quotation_lines')
+    description = models.CharField(max_length=255)
+    quantity = models.IntegerField()
+    unit_price = models.PositiveIntegerField()
+
