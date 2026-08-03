@@ -15,6 +15,7 @@
             <th scope="col">Client Last Name</th>
             <th scope="col">Client Email</th>
             <th scope="col">Client Phone</th>
+            <th scope="col">Booking State</th>
             <th scope="col">Car Brand</th>
             <th scope="col">Car Model</th>
             <th scope="col">Car Number Plate</th>
@@ -29,6 +30,7 @@
                 <td>{{ booking.client.user.last_name }}</td>
                 <td>{{ booking.client.user.email }}</td>
                 <td>{{ booking.client.phone_number }}</td>
+                <td>{{ booking.get_status_display }}</td>
                 <td>{{ booking.car_brand }}</td>
                 <td>{{ booking.car_model }}</td>
                 <td>{{ booking.car_number_plate }}</td>
