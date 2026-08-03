@@ -29,8 +29,10 @@
     </table>
 
     <div>
+        {% include 'partials/alerts.html' %}
         <h2 class="mt-4">Booking Details</h2>
-        <form>
+        <form method="post">
+            {% csrf_token %}
             {{ booking_form|crispy }}
             <button class="btn btn-success" type="submit">Create Booking</button>
         </form>

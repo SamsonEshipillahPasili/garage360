@@ -1,7 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 from django.views import View
 
 from django.views.generic import TemplateView
@@ -37,3 +39,24 @@ class CreateBookingView(LoginRequiredMixin, View):
         }
         return render(request, 'core/create_booking.html', context)
 
+    def post(self, request: HttpRequest, profile_id: int):
+        qs = self._get_user_profile_qs(request=request)
+        user_profile = get_object_or_404(qs, pk=profile_id)
+
+        booking_form = CreateBookingForm(request.POST)
+        if booking_form.is_valid():
+            booking_form.save(
+                client=user_profile,
+                created_by=request.user.profile,
+            )
+            messages.info(request, 'Booking was created successfully')
+            return HttpResponseRedirect(
+                reverse('core:create_booking', kwargs={'profile_id': profile_id})
+            )
+        else:
+            messages.error(request, 'Error creating booking')
+            context = {
+                'profile': user_profile,
+                'booking_form': booking_form,
+            }
+            return render(request, 'core/create_booking.html', context)
