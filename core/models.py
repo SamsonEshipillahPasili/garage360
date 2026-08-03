@@ -27,6 +27,7 @@ class Booking(TimestampedModel):
         PENDING = 'pending', 'Pending'
         IN_PROGRESS = 'in_progress', 'In Progress'
         DONE = 'done', 'Done'
+        CANCELLED = 'cancelled', 'Cancelled'
 
     # custom manager
     objects = BookingManager()
