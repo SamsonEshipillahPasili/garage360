@@ -45,6 +45,7 @@
             <tr>
                 <th scope="col">ID#</th>
                 <th scope="col">Booking Date</th>
+                <th scope="col">Booking State</th>
                 <th scope="col">Car Brand</th>
                 <th scope="col">Car Model</th>
                 <th scope="col">Car Number Plate</th>
@@ -55,6 +56,25 @@
                 <tr>
                     <td>{{ booking.id }}</td>
                     <td>{{ booking.booking_date }}</td>
+                    <td class="text-center">
+                        {% if booking.status == 'pending' %}
+                            <span class="badge rounded-pill text-bg-secondary">
+                                {{ booking.get_status_display }}
+                            </span>
+                        {% elif booking.status == 'in_progress' %}
+                            <span class="badge rounded-pill text-bg-success">
+                                {{ booking.get_status_display }}
+                            </span>
+                        {% elif booking.status == 'done' %}
+                            <span class="badge rounded-pill text-bg-success">
+                                {{ booking.get_status_display }}
+                            </span>
+                        {% else %}
+                            <span class="badge rounded-pill text-bg-danger">
+                                {{ booking.get_status_display }}
+                            </span>
+                        {% endif %}
+                    </td>
                     <td>{{ booking.car_brand }}</td>
                     <td>{{ booking.car_model }}</td>
                     <td>{{ booking.car_number_plate }}</td>
