@@ -51,31 +51,18 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>12</td>
-                <td>12/02/2026</td>
-                <td>Audi</td>
-                <td>SQ5</td>
-                <td>KDN 6681</td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td>12/02/2026</td>
-                <td>Audi</td>
-                <td>SQ5</td>
-                <td>KDN 6681</td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td>12/02/2026</td>
-                <td>Audi</td>
-                <td>SQ5</td>
-                <td>KDN 6681</td>
-            </tr>
+            {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.id }}</td>
+                    <td>{{ booking.booking_date }}</td>
+                    <td>{{ booking.car_brand }}</td>
+                    <td>{{ booking.car_model }}</td>
+                    <td>{{ booking.car_number_plate }}</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
-
 </div>
 
 {% endblock %}

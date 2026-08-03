@@ -10,6 +10,7 @@ from django.views.generic import TemplateView
 
 from accounts.models import UserProfile
 from .forms import CreateBookingForm
+from .models import Booking
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -30,15 +31,22 @@ class CreateBookingView(LoginRequiredMixin, View):
                 )
         )
 
+    def _get_bookings(self, client: UserProfile) -> QuerySet[Booking]:
+        return Booking.objects.filter(
+            client=client
+        )
+
     def get(self, request: HttpRequest, profile_id: int):
         qs = self._get_user_profile_qs(request=request)
         user_profile = get_object_or_404(qs, pk=profile_id)
+        bookings = self._get_bookings(user_profile)
 
         booking_form = CreateBookingForm()
 
         context = {
             'profile': user_profile,
             'booking_form': booking_form,
+            'bookings': bookings,
         }
         return render(request, self._get_template_name(), context)
 
@@ -61,5 +69,6 @@ class CreateBookingView(LoginRequiredMixin, View):
             context = {
                 'profile': user_profile,
                 'booking_form': booking_form,
+                'bookings': self._get_bookings(user_profile),
             }
             return render(request, self._get_template_name(), context)
