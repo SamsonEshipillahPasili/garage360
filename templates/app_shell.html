@@ -232,9 +232,8 @@
               </li>
               <li>
                 <a
-                  href="#"
-                  class="nav-link link-body-emphasis"
-                  data-bs-dismiss="offcanvas"
+                  href="{% url 'core:list_bookings' %}"
+                  class="nav-link {% if menu_item == 'list_all_bookings' %} active {% endif %}"
                 >
                   <svg
                     class="bi pe-none me-2"
@@ -244,7 +243,7 @@
                   >
                     <use xlink:href="#speedometer2"></use>
                   </svg>
-                  Dashboard
+                  Bookings
                 </a>
               </li>
               <li>

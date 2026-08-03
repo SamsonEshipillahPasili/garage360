@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import View
 
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from accounts.models import UserProfile
 from .forms import CreateBookingForm
@@ -72,3 +72,20 @@ class CreateBookingView(LoginRequiredMixin, View):
                 'bookings': self._get_bookings(user_profile),
             }
             return render(request, self._get_template_name(), context)
+
+
+class ListAllBookingsView(LoginRequiredMixin, ListView):
+    template_name = 'core/list_all_bookings.html'
+    context_object_name = 'bookings'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu_item'] = 'list_all_bookings'
+        return context
+
+    def get_queryset(self) -> QuerySet[Booking]:
+        return (
+            Booking.objects
+                .select_related('client__user')
+                .filter(client__organization=self.request.user.profile.organization)
+        )
