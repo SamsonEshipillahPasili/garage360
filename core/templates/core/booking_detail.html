@@ -5,25 +5,28 @@
 {% block content %}
 
 <div class="container">
-    <h1 class="mt-4">List Bookings</h1>
+
+    <h1 class="mt-4">Booking Details</h1>
+
+    <h2 class="mt-4">Booking Details #{{ booking.id }}</h2>
     <table class="table table-bordered">
         <thead>
-        <tr>
-            <th scope="col">Booking Date</th>
-            <th scope="col">Client First Name</th>
-            <th scope="col">Client Last Name</th>
-            <th scope="col">Client Email</th>
-            <th scope="col">Client Phone</th>
-            <th scope="col">Booking State</th>
-            <th scope="col">Car Brand</th>
-            <th scope="col">Car Model</th>
-            <th scope="col">Car Number Plate</th>
-            <th scope="col">Actions</th>
-        </tr>
+            <tr>
+                <th scope="col">ID#</th>
+                <th scope="col">Booking Date</th>
+                <th scope="col">Client First Name</th>
+                <th scope="col">Client Last Name</th>
+                <th scope="col">Client Email</th>
+                <th scope="col">Client Phone</th>
+                <th scope="col">Booking State</th>
+                <th scope="col">Car Brand</th>
+                <th scope="col">Car Model</th>
+                <th scope="col">Car Number Plate</th>
+            </tr>
         </thead>
         <tbody>
-        {% for booking in bookings %}
             <tr>
+                <td>{{ booking.id }}</td>
                 <td>{{ booking.booking_date }}</td>
                 <td>{{ booking.client.user.first_name }}</td>
                 <td>{{ booking.client.user.last_name }}</td>
@@ -51,17 +54,7 @@
                 <td>{{ booking.car_brand }}</td>
                 <td>{{ booking.car_model }}</td>
                 <td>{{ booking.car_number_plate }}</td>
-                <td>
-                    <a href="{% url 'core:booking_detail' booking_id=booking.id %}" class="btn btn-sm btn-primary">View</a>
-                </td>
             </tr>
-        {% endfor %}
-
-        {% if bookings|length == 0 %}
-            <tr>
-                <td colspan="5" class="text-center">No bookings available</td>
-            </tr>
-        {% endif %}
         </tbody>
     </table>
 </div>

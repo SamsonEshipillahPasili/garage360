@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
-from django.http import HttpRequest, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import View
@@ -89,3 +89,15 @@ class ListAllBookingsView(LoginRequiredMixin, ListView):
                 .select_related('client__user')
                 .filter(client__organization=self.request.user.profile.organization)
         )
+
+
+class BookingDetailView(LoginRequiredMixin, View):
+    def get(self, request: HttpRequest, booking_id: int):
+        qs = Booking.objects.select_related('client__organization')
+        booking = get_object_or_404(qs, pk=booking_id)
+        if booking.client.organization.id != request.user.profile.organization.id:
+            raise Http404
+        context = {
+            'booking': booking,
+        }
+        return render(request, 'core/booking_detail.html', context)
