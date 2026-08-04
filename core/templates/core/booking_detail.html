@@ -60,6 +60,7 @@
 
 
     <h2 class="mt-4">Quotation</h2>
+    {% include 'partials/alerts.html' %}
     <div>
         <h3>Create Quotation Item</h3>
         <form method="post" action="{% url 'core:create_quotation_line' quotation_id=1 %}">
