@@ -138,7 +138,7 @@ LOGIN_URL = reverse_lazy('accounts:login')
 
 LOGOUT_REDIRECT_URL = reverse_lazy('accounts:login')
 
-LOGIN_REDIRECT_URL = reverse_lazy('core:index')
+LOGIN_REDIRECT_URL = reverse_lazy('accounts:list_profiles')
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
