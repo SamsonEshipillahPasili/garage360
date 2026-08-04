@@ -72,3 +72,5 @@ class QuotationLine(TimestampedModel):
     quantity = models.IntegerField()
     unit_price = models.PositiveIntegerField()
 
+    def total_price(self):
+        return self.quantity * self.unit_price
