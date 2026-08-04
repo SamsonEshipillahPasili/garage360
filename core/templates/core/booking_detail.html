@@ -79,16 +79,13 @@
             </tr>
         </thead>
         <tbody>
+        {% for line in booking.quotation.quotation_lines %}
             <tr>
-                <td>Change Brake Pads</td>
-                <td>2</td>
-                <td>Ksh. 300</td>
+                <td>{{ line.description }}</td>
+                <td>{{ line.quantity }}</td>
+                <td>USD {{ line.unit_price }}</td>
             </tr>
-            <tr>
-                <td>Change Brake Pads</td>
-                <td>2</td>
-                <td>Ksh. 300</td>
-            </tr>
+        {% endfor %}
         </tbody>
     </table>
 
