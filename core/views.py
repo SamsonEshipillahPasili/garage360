@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import TemplateView, ListView
 
 from accounts.models import UserProfile
-from .forms import CreateBookingForm, CreateQuotationItemForm
+from .forms import CreateBookingForm, CreateQuotationLineForm
 from .models import Booking, Quotation
 
 
@@ -106,7 +106,7 @@ class BookingDetailView(LoginRequiredMixin, View):
         context = {
             'booking': booking,
             'quotation_lines': quotation_lines,
-            'quotation_item_form': CreateQuotationItemForm(),
+            'quotation_item_form': CreateQuotationLineForm(),
         }
         return render(request, 'core/booking_detail.html', context)
 
@@ -127,7 +127,7 @@ class CreateQuotationItemView(LoginRequiredMixin, View):
         if quotation.booking.created_by.organization.id != request.user.profile.organization.id:
             raise Http404
 
-        form = CreateQuotationItemForm(request.POST)
+        form = CreateQuotationLineForm(request.POST)
         if form.is_valid():
             form.save(quotation=quotation)
             messages.info(request, 'Quotation was created successfully')

@@ -24,7 +24,7 @@ class CreateBookingForm(forms.Form):
             data=self.cleaned_data
         )
 
-class CreateQuotationItemForm(forms.Form):
+class CreateQuotationLineForm(forms.Form):
     description = forms.CharField(max_length=255)
     quantity = forms.IntegerField()
     unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
