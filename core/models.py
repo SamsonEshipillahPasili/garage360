@@ -66,10 +66,6 @@ class Quotation(TimestampedModel):
     is_approved = models.BooleanField(default=False)
     approved_at = models.DateTimeField(null=True, blank=True)
 
-    def total_quantity(self) -> int:
-        from django.db.models import Sum
-        result = self.quotation_lines.aggregate(total_quantity=Sum('quantity'))
-        return result['total_quantity']
 
     def total_price(self) -> float:
         totals = [
