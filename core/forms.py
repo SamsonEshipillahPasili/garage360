@@ -21,7 +21,7 @@ class CreateBookingForm(forms.Form):
         return Booking.objects.create_booking(
             client=client,
             created_by=created_by,
-            **self.cleaned_data
+            data=self.cleaned_data
         )
 
 class CreateQuotationItemForm(forms.Form):
