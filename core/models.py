@@ -71,6 +71,13 @@ class Quotation(TimestampedModel):
         result = self.quotation_lines.aggregate(total_quantity=Sum('quantity'))
         return result['total_quantity']
 
+    def total_price(self) -> float:
+        totals = [
+            line.total_price()
+            for line in self.quotation_lines
+        ]
+        return sum(totals)
+
 class QuotationLine(TimestampedModel):
     quotation = models.ForeignKey(Quotation, on_delete=models.CASCADE, related_name='quotation_lines')
     description = models.CharField(max_length=255)
