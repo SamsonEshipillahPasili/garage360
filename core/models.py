@@ -70,7 +70,7 @@ class Quotation(TimestampedModel):
     def total_price(self) -> float:
         totals = [
             line.total_price()
-            for line in self.quotation_lines
+            for line in self.quotation_lines.all()
         ]
         return sum(totals)
 

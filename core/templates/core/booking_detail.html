@@ -95,6 +95,10 @@
                 <td>USD {{ line.total_price }}</td>
             </tr>
         {% endfor %}
+        <tr>
+            <td colspan="3" class="text-end fw-bold">Total Price</td>
+            <td class="fw-bold text-danger">USD {{ booking.quotation.total_price }}</td>
+        </tr>
         </tbody>
     </table>
 
