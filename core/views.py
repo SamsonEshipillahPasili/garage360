@@ -133,8 +133,10 @@ class CreateQuotationItemView(LoginRequiredMixin, View):
             messages.info(request, 'Quotation was created successfully')
             return HttpResponseRedirect(reverse('core:booking_detail', kwargs={'booking_id': quotation.booking.id}))
 
+        quotation_lines = quotation.booking.quotation.quotation_lines.all()
         context = {
             'booking': quotation.booking,
-            'quotation_item_form': form
+            'quotation_item_form': form,
+            'quotation_lines': quotation_lines,
         }
         return render(request, 'core/booking_detail.html', context)
