@@ -35,6 +35,12 @@ class CreateQuotationLineForm(forms.Form):
             raise forms.ValidationError('Quantity must be greater than 0')
         return quantity
 
+    def clean_unit_price(self):
+        unit_price = self.cleaned_data['unit_price']
+        if unit_price <= 0:
+            raise forms.ValidationError('Unit price must be greater than 0')
+        return unit_price
+
     def save(self, quotation: Quotation) -> QuotationLine:
         return QuotationLine.objects.create(
             quotation=quotation,
