@@ -10,7 +10,7 @@ from django.views.generic import TemplateView, ListView
 
 from accounts.models import UserProfile
 from .forms import CreateBookingForm, CreateQuotationLineForm
-from .models import Booking, Quotation
+from .models import Booking, Quotation, QuotationLine
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -140,3 +140,20 @@ class CreateQuotationItemView(LoginRequiredMixin, View):
             'quotation_lines': quotation_lines,
         }
         return render(request, 'core/booking_detail.html', context)
+
+
+class DeleteQuotationLineView(LoginRequiredMixin, View):
+    def post(self, request: HttpRequest, line_id: int):
+        qs = QuotationLine.objects.select_related('quotation__booking__created_by').all()
+        item = get_object_or_404(qs, pk=line_id)
+
+        quotation = item.quotation
+
+        # reject cross-org deletion
+        if quotation.booking.created_by.organization.id != request.user.profile.organization.id:
+            raise Http404
+
+        item.delete()
+
+        messages.warning(request, 'Quotation was deleted successfully')
+        return HttpResponseRedirect(reverse('core:booking_detail', kwargs={'booking_id': quotation.booking.id}))

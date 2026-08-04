@@ -8,6 +8,7 @@
 
     <h1 class="mt-4">Booking Details</h1>
 
+    {% include 'partials/alerts.html' %}
     <h2 class="mt-4">Booking Details #{{ booking.id }}</h2>
     <table class="table table-bordered">
         <thead>
@@ -60,7 +61,6 @@
 
 
     <h2 class="mt-4">Quotation</h2>
-    {% include 'partials/alerts.html' %}
     <div>
         <h3>Create Quotation Item</h3>
         <form method="post" action="{% url 'core:create_quotation_line' quotation_id=1 %}">
@@ -94,7 +94,10 @@
                 <td>USD {{ line.unit_price }}</td>
                 <td class="d-flex justify-content-between">
                     <span>USD {{ line.total_price }}</span>
-                    <button class="btn btn-sm btn-danger">Delete</button>
+                    <form method="post" action="{% url 'core:delete_quotation_line' line_id=line.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
                 </td>
             </tr>
         {% endfor %}
