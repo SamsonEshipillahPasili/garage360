@@ -92,12 +92,17 @@
                 <td>{{ line.description }}</td>
                 <td>{{ line.quantity }}</td>
                 <td>USD {{ line.unit_price }}</td>
-                <td>USD {{ line.total_price }}</td>
+                <td class="d-flex justify-content-between">
+                    <span>USD {{ line.total_price }}</span>
+                    <button class="btn btn-sm btn-danger">Delete</button>
+                </td>
             </tr>
         {% endfor %}
         <tr>
             <td colspan="3" class="text-end fw-bold">Total Price</td>
-            <td class="fw-bold text-danger">USD {{ booking.quotation.total_price }}</td>
+            <td class="fw-bolder text-danger">
+                USD {{ booking.quotation.total_price }}
+            </td>
         </tr>
         </tbody>
     </table>
