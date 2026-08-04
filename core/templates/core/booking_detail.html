@@ -62,7 +62,7 @@
     <h2 class="mt-4">Quotation</h2>
     <div>
         <h3>Create Quotation Item</h3>
-        <form>
+        <form method="post" action="{% url 'core:create_quotation_line' quotation_id=1 %}">
             {% csrf_token %}
             {{ quotation_item_form|crispy }}
             <button class="btn btn-primary">Create Item</button>
@@ -79,13 +79,13 @@
             </tr>
         </thead>
         <tbody>
-        {% if booking.quotation.quotation_lines|length == 0  %}
+        {% if quotation_lines|length == 0  %}
             <tr>
                 <td colspan="3" class="text-center">No lines found</td>
             </tr>
         {% endif %}
 
-        {% for line in booking.quotation.quotation_lines %}
+        {% for line in quotation_lines %}
             <tr>
                 <td>{{ line.description }}</td>
                 <td>{{ line.quantity }}</td>

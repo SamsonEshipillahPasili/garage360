@@ -96,14 +96,16 @@ class BookingDetailView(LoginRequiredMixin, View):
         qs = (
             Booking.objects
                 .select_related('client__organization', 'quotation')
-                .prefetch_related('quotation__quotation_lines')
         )
         booking = get_object_or_404(qs, pk=booking_id)
+        quotation_lines = booking.quotation.quotation_lines.all()
+
         if booking.client.organization.id != request.user.profile.organization.id:
             raise Http404
 
         context = {
             'booking': booking,
+            'quotation_lines': quotation_lines,
             'quotation_item_form': CreateQuotationItemForm(),
         }
         return render(request, 'core/booking_detail.html', context)
