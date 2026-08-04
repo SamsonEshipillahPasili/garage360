@@ -66,6 +66,11 @@ class Quotation(TimestampedModel):
     is_approved = models.BooleanField(default=False)
     approved_at = models.DateTimeField(null=True, blank=True)
 
+    def total_quantity(self) -> int:
+        from django.db.models import Sum
+        result = self.quotation_lines.aggregate(total_quantity=Sum('quantity'))
+        return result['total_quantity']
+
 class QuotationLine(TimestampedModel):
     quotation = models.ForeignKey(Quotation, on_delete=models.CASCADE, related_name='quotation_lines')
     description = models.CharField(max_length=255)
