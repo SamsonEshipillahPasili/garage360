@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import TemplateView, ListView
 
 from accounts.models import UserProfile
-from .forms import CreateBookingForm
+from .forms import CreateBookingForm, CreateQuotationItemForm
 from .models import Booking
 
 
@@ -99,5 +99,6 @@ class BookingDetailView(LoginRequiredMixin, View):
             raise Http404
         context = {
             'booking': booking,
+            'quotation_item_form': CreateQuotationItemForm(),
         }
         return render(request, 'core/booking_detail.html', context)
