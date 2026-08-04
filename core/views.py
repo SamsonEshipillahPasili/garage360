@@ -10,7 +10,7 @@ from django.views.generic import TemplateView, ListView
 
 from accounts.models import UserProfile
 from .forms import CreateBookingForm, CreateQuotationItemForm
-from .models import Booking
+from .models import Booking, Quotation
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -100,5 +100,34 @@ class BookingDetailView(LoginRequiredMixin, View):
         context = {
             'booking': booking,
             'quotation_item_form': CreateQuotationItemForm(),
+        }
+        return render(request, 'core/booking_detail.html', context)
+
+
+class CreateQuotationItemView(LoginRequiredMixin, View):
+
+    def post(self, request: HttpRequest, quotation_id: int):
+        quotation_qs = Quotation.objects.select_related('booking__created_by__organization')
+
+        # ensure the quotation exists.
+        quotation = get_object_or_404(quotation_qs, pk=quotation_id)
+
+        # ensure the booking status is not terminal
+        if quotation.booking.status not in (Booking.BookingStatus.PENDING, Booking.BookingStatus.IN_PROGRESS):
+            raise Http404
+
+        # ensure the booking was created by a member of the same org
+        if quotation.booking.created_by.organization.id != request.user.profile.organization.id:
+            raise Http404
+
+        form = CreateQuotationItemForm(request.POST)
+        if form.is_valid():
+            form.save(quotation=quotation)
+            messages.info(request, 'Quotation was created successfully')
+            return HttpResponseRedirect(reverse('core:booking_detail', kwargs={'booking_id': quotation.booking.id}))
+
+        context = {
+            'booking': quotation.booking,
+            'quotation_item_form': form
         }
         return render(request, 'core/booking_detail.html', context)

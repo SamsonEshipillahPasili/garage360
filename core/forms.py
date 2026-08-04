@@ -2,7 +2,7 @@ from django import forms
 
 from django.core.exceptions import PermissionDenied
 from accounts.models import UserProfile
-from core.models import Booking
+from core.models import Booking, Quotation, QuotationLine
 
 
 class CreateBookingForm(forms.Form):
@@ -28,3 +28,9 @@ class CreateQuotationItemForm(forms.Form):
     description = forms.CharField(max_length=255)
     quantity = forms.IntegerField()
     unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
+
+    def save(self, quotation: Quotation) -> QuotationLine:
+        return QuotationLine.objects.create(
+            quotation=quotation,
+            **self.cleaned_data
+        )
