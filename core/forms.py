@@ -29,6 +29,12 @@ class CreateQuotationLineForm(forms.Form):
     quantity = forms.IntegerField()
     unit_price = forms.DecimalField(max_digits=10, decimal_places=2)
 
+    def clean_quantity(self):
+        quantity = self.cleaned_data['quantity']
+        if quantity <= 0:
+            raise forms.ValidationError('Quantity must be greater than 0')
+        return quantity
+
     def save(self, quotation: Quotation) -> QuotationLine:
         return QuotationLine.objects.create(
             quotation=quotation,
