@@ -18,7 +18,7 @@ class CreateBookingForm(forms.Form):
         if created_by.organization.id != client.organization.id:
             raise PermissionDenied()
 
-        return Booking.objects.create(
+        return Booking.objects.create_booking(
             client=client,
             created_by=created_by,
             **self.cleaned_data
