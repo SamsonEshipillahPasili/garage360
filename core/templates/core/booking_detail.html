@@ -1,6 +1,7 @@
 {% extends 'app_shell.html' %}
 
 {% load crispy_forms_tags %}
+{% load static %}
 
 {% block content %}
 
@@ -9,7 +10,7 @@
     <h1 class="mt-4">Booking Details</h1>
 
     {% include 'partials/alerts.html' %}
-    <h2 class="mt-4">Booking Details #{{ booking.id }}</h2>
+    <h3 class="mt-4">Booking Details #{{ booking.id }}</h3>
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -60,17 +61,37 @@
     </table>
 
 
-    <h2 class="mt-4">Quotation</h2>
+    <h3 class="mt-4">Quotation</h3>
     <div>
-        <h3>Create Quotation Item</h3>
-        <form method="post" action="{% url 'core:create_quotation_line' quotation_id=1 %}">
-            {% csrf_token %}
-            {{ quotation_item_form|crispy }}
-            <button class="btn btn-primary">Create Item</button>
-        </form>
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#add-client-modal">Add Quotation Item</button>
+        </div>
+        <div class="modal fade" id="add-client-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Quotation Item</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              
+              <div id="create-quotation-line-form-container">
+                  <form method="post" action="{% url 'core:create_quotation_line' quotation_id=booking.quotation.id %}" id="create-quotation-line-form">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        {{ quotation_item_form|crispy }}
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      <button type="button" id="create-quotation-line-btn" class="btn btn-primary">Add Quotation Item</button>
+                    </div>
+                  </form>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
 
-    <h3 class="mt-4">Quotation Items</h3>
+    
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -112,4 +133,8 @@
 
 </div>
 
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'core/js/booking.js' %}"></script>
 {% endblock %}
