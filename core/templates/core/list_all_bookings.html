@@ -1,69 +1,298 @@
 {% extends 'app_shell.html' %}
+{% load static %}
 
-{% load crispy_forms_tags %}
+{% block css %}
+{{ block.super }}
+<style>
+    .bookings-hero-card {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 1.25rem;
+    }
+    .bookings-table-card {
+        border-radius: 1.25rem;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+    }
+    .bookings-table-card .table {
+        margin-bottom: 0;
+    }
+    .bookings-table-card .table thead th {
+        background-color: #f8fafc;
+        color: #64748b;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .bookings-table-card .table tbody td {
+        padding: 1rem 1.25rem;
+        vertical-align: middle;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .bookings-table-card .table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    .bookings-table-card .table tbody tr {
+        transition: background-color 0.2s ease;
+    }
+    .bookings-table-card .table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+    .avatar-circle {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+    }
+    .btn-action {
+        border-radius: 0.6rem;
+        font-weight: 500;
+        font-size: 0.825rem;
+        padding: 0.45rem 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        height: fit-content;
+        align-self: center;
+    }
+    .btn-action:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .search-input-group .form-control {
+        border-radius: 0.75rem;
+        padding-left: 2.6rem;
+        border: 1px solid #e2e8f0;
+        font-size: 0.875rem;
+        background-color: #f8fafc;
+        transition: all 0.2s ease;
+    }
+    .search-input-group .form-control:focus {
+        background-color: #ffffff;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+    .search-input-group .search-icon {
+        position: absolute;
+        left: 0.95rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        z-index: 5;
+    }
+    .badge-soft-success {
+        background-color: #dcfce7;
+        color: #15803d;
+        font-weight: 600;
+        border: 1px solid #bbf7d0;
+    }
+    .badge-soft-info {
+        background-color: #e0f2fe;
+        color: #0369a1;
+        font-weight: 600;
+        border: 1px solid #bae6fd;
+    }
+    .badge-soft-warning {
+        background-color: #fef3c7;
+        color: #b45309;
+        font-weight: 600;
+        border: 1px solid #fde68a;
+    }
+    .badge-soft-danger {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        font-weight: 600;
+        border: 1px solid #fecaca;
+    }
+    .badge-soft-secondary {
+        background-color: #f1f5f9;
+        color: #475569;
+        font-weight: 600;
+        border: 1px solid #e2e8f0;
+    }
+    .plate-badge {
+        background-color: #1e293b;
+        color: #f8fafc;
+        font-family: var(--bs-font-monospace);
+        font-size: 0.775rem;
+        padding: 0.25rem 0.6rem;
+        border-radius: 0.4rem;
+        letter-spacing: 0.05em;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 
-<div class="container">
-    <h1 class="mt-4">List Bookings</h1>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th scope="col">Booking Date</th>
-            <th scope="col">Client First Name</th>
-            <th scope="col">Client Last Name</th>
-            <th scope="col">Client Email</th>
-            <th scope="col">Client Phone</th>
-            <th scope="col">Booking State</th>
-            <th scope="col">Car Brand</th>
-            <th scope="col">Car Model</th>
-            <th scope="col">Car Number Plate</th>
-            <th scope="col">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for booking in bookings %}
-            <tr>
-                <td>{{ booking.booking_date }}</td>
-                <td>{{ booking.client.user.first_name }}</td>
-                <td>{{ booking.client.user.last_name }}</td>
-                <td>{{ booking.client.user.email }}</td>
-                <td>{{ booking.client.phone_number }}</td>
-                <td class="text-center">
-                    {% if booking.status == 'pending' %}
-                        <span class="badge rounded-pill text-bg-secondary">
-                            {{ booking.get_status_display }}
-                        </span>
-                    {% elif booking.status == 'in_progress' %}
-                        <span class="badge rounded-pill text-bg-success">
-                            {{ booking.get_status_display }}
-                        </span>
-                    {% elif booking.status == 'done' %}
-                        <span class="badge rounded-pill text-bg-success">
-                            {{ booking.get_status_display }}
-                        </span>
-                    {% else %}
-                        <span class="badge rounded-pill text-bg-danger">
-                            {{ booking.get_status_display }}
-                        </span>
-                    {% endif %}
-                </td>
-                <td>{{ booking.car_brand }}</td>
-                <td>{{ booking.car_model }}</td>
-                <td>{{ booking.car_number_plate }}</td>
-                <td>
-                    <a href="{% url 'core:booking_detail' booking_id=booking.id %}" class="btn btn-sm btn-primary">View</a>
-                </td>
-            </tr>
-        {% endfor %}
+<div class="container py-4">
 
-        {% if bookings|length == 0 %}
-            <tr>
-                <td colspan="5" class="text-center">No bookings available</td>
-            </tr>
-        {% endif %}
-        </tbody>
-    </table>
+    <!-- Hero Header Banner -->
+    <div class="bookings-hero-card p-4 p-md-5 mb-4 shadow-sm position-relative overflow-hidden">
+        <div class="row align-items-center position-relative z-1">
+            <div class="col-md-8">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 text-uppercase fw-semibold" style="font-size: 0.725rem;">
+                        <i class="bi bi-tools me-1"></i> Garage Services
+                    </span>
+                </div>
+                <h1 class="h2 fw-bold text-white mb-2">
+                    <i class="bi bi-calendar-check-fill text-primary me-2"></i>Bookings Directory
+                </h1>
+                <p class="text-light mb-0 opacity-75" style="max-width: 580px;">
+                    Track and manage vehicle service appointments, client information, and repair progress in real time.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="{% url 'accounts:list_profiles' %}" class="btn btn-primary shadow-sm rounded-3 px-3.5 py-2 fw-semibold d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-plus-lg"></i>
+                    <span>New Booking</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Card Container -->
+    <div class="card bookings-table-card mb-4">
+        <div class="card-header bg-white py-3 px-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 border-bottom">
+            <div class="d-flex align-items-center gap-2">
+                <h5 class="fw-bold mb-0 text-dark">All Bookings</h5>
+                <span class="badge badge-soft-secondary rounded-pill px-2.5 py-1">{{ bookings|length }} total</span>
+            </div>
+            
+            <div class="position-relative search-input-group" style="min-width: 280px;">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" id="booking-search-input" class="form-control" placeholder="Search client, car, plate, status...">
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle" id="bookings-table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-nowrap">Booking Date</th>
+                        <th scope="col" class="text-nowrap">Client</th>
+                        <th scope="col" class="text-nowrap">Contact Info</th>
+                        <th scope="col" class="text-nowrap">Vehicle Details</th>
+                        <th scope="col" class="text-nowrap">Number Plate</th>
+                        <th scope="col" class="text-nowrap text-center">Status</th>
+                        <th scope="col" class="text-end text-nowrap">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for booking in bookings %}
+                    <tr class="booking-row">
+                        <td class="text-nowrap">
+                            <div class="fw-semibold text-dark">
+                                <i class="bi bi-calendar3 text-muted me-1.5 small"></i>{{ booking.booking_date }}
+                            </div>
+                        </td>
+                        <td class="text-nowrap">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="avatar-circle bg-primary-subtle text-primary border border-primary-subtle">
+                                    {% if booking.client.user.first_name %}{{ booking.client.user.first_name|first|upper }}{% else %}C{% endif %}{% if booking.client.user.last_name %}{{ booking.client.user.last_name|first|upper }}{% endif %}
+                                </div>
+                                <div>
+                                    <div class="fw-semibold text-dark">{{ booking.client.user.first_name }} {{ booking.client.user.last_name }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-nowrap">
+                            <div>
+                                {% if booking.client.user.email %}
+                                    <div class="small text-dark mb-0.5"><i class="bi bi-envelope text-muted me-1"></i>{{ booking.client.user.email }}</div>
+                                {% endif %}
+                                {% if booking.client.phone_number %}
+                                    <div class="small text-muted"><i class="bi bi-telephone text-muted me-1"></i>{{ booking.client.phone_number }}</div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="text-nowrap">
+                            <div class="fw-semibold text-dark">
+                                <i class="bi bi-car-front text-primary me-1"></i>{{ booking.car_brand }} {{ booking.car_model }}
+                            </div>
+                        </td>
+                        <td class="text-nowrap">
+                            <span class="plate-badge">{{ booking.car_number_plate }}</span>
+                        </td>
+                        <td class="text-center text-nowrap">
+                            {% if booking.status == 'pending' %}
+                                <span class="badge badge-soft-warning rounded-pill px-2.5 py-1">
+                                    <i class="bi bi-clock-history me-1"></i>{{ booking.get_status_display }}
+                                </span>
+                            {% elif booking.status == 'in_progress' %}
+                                <span class="badge badge-soft-info rounded-pill px-2.5 py-1">
+                                    <i class="bi bi-gear-fill me-1"></i>{{ booking.get_status_display }}
+                                </span>
+                            {% elif booking.status == 'done' %}
+                                <span class="badge badge-soft-success rounded-pill px-2.5 py-1">
+                                    <i class="bi bi-check-circle-fill me-1"></i>{{ booking.get_status_display }}
+                                </span>
+                            {% else %}
+                                <span class="badge badge-soft-danger rounded-pill px-2.5 py-1">
+                                    <i class="bi bi-x-circle-fill me-1"></i>{{ booking.get_status_display }}
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <div class="d-inline-flex align-items-center gap-2">
+                                <a href="{% url 'core:booking_detail' booking_id=booking.id %}" class="btn btn-action btn-outline-primary" title="View Booking Details">
+                                    <i class="bi bi-eye-fill"></i>
+                                    <span>View</span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center py-5">
+                            <div class="py-4">
+                                <i class="bi bi-calendar-x text-muted opacity-50 display-4 d-block mb-3"></i>
+                                <h6 class="fw-semibold text-secondary">No Bookings Found</h6>
+                                <p class="text-muted small mb-3">There are currently no vehicle bookings recorded.</p>
+                                <a href="{% url 'accounts:list_profiles' %}" class="btn btn-sm btn-primary rounded-pill px-3">
+                                    <i class="bi bi-plus-lg me-1"></i>Create First Booking
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}
+
+{% block js %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('booking-search-input');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                const query = this.value.toLowerCase().trim();
+                const rows = document.querySelectorAll('#bookings-table tbody tr.booking-row');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(query) ? '' : 'none';
+                });
+            });
+        }
+    });
+  </script>
+{% endblock %}
+
