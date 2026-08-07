@@ -59,8 +59,9 @@ class CreateUserProfileView(LoginRequiredMixin, FormView):
 
         entity = 'Staff' if self.is_staff() else 'Client'
         messages.info(self.request, f'{entity} created successfully')
+        is_staff_query_param = 'true' if self.is_staff() else 'false'
         return HttpResponseRedirect(
-            reverse_lazy('accounts:list_profiles', query={'is_staff': 'true'})
+            reverse_lazy('accounts:list_profiles', query={'is_staff': is_staff_query_param})
         )
 
 class ListProfilesView(LoginRequiredMixin, ListView):
