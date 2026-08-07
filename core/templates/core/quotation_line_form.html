@@ -1,0 +1,14 @@
+{% load crispy_forms_tags %}
+
+<div id="create-quotation-line-form-container">
+    <form method="post" action="{% url 'core:create_quotation_line' quotation_id=booking.quotation.id %}" id="create-quotation-line-form">
+        <div class="modal-body">
+            {% csrf_token %}
+            {{ quotation_item_form|crispy }}
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" id="create-quotation-line-btn" class="btn btn-primary">Add Quotation Item</button>
+        </div>
+    </form>
+</div>

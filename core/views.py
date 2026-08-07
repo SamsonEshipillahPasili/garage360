@@ -133,13 +133,11 @@ class CreateQuotationItemView(LoginRequiredMixin, View):
             messages.info(request, 'Quotation was created successfully')
             return HttpResponseRedirect(reverse('core:booking_detail', kwargs={'booking_id': quotation.booking.id}))
 
-        quotation_lines = quotation.booking.quotation.quotation_lines.all()
         context = {
-            'booking': quotation.booking,
             'quotation_item_form': form,
-            'quotation_lines': quotation_lines,
+            'booking': quotation.booking
         }
-        return render(request, 'core/booking_detail.html', context)
+        return render(request, 'core/quotation_line_form.html', context)
 
 
 class DeleteQuotationLineView(LoginRequiredMixin, View):
