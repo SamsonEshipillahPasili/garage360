@@ -1,8 +1,85 @@
 {% if messages %}
+<style>
+  .custom-alert-wrapper {
+    margin-bottom: 1.25rem;
+  }
+  .custom-alert {
+    border-radius: 0.85rem;
+    border: 1px solid transparent;
+    padding: 0.85rem 1.25rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+  }
+  .custom-alert .alert-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 500;
+    font-size: 0.925rem;
+  }
+  .custom-alert-success {
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+  }
+  .custom-alert-success .alert-icon {
+    color: #22c55e;
+  }
+  .custom-alert-info {
+    background-color: #f0f9ff;
+    border-color: #bae6fd;
+    color: #075985;
+  }
+  .custom-alert-info .alert-icon {
+    color: #0284c7;
+  }
+  .custom-alert-warning {
+    background-color: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+  }
+  .custom-alert-warning .alert-icon {
+    color: #f59e0b;
+  }
+  .custom-alert-danger, .custom-alert-error {
+    background-color: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+  }
+  .custom-alert-danger .alert-icon, .custom-alert-error .alert-icon {
+    color: #ef4444;
+  }
+  .custom-alert .btn-close {
+    position: relative;
+    padding: 0.5rem;
+    margin: -0.5rem -0.5rem -0.5rem auto;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+  }
+  .custom-alert .btn-close:hover {
+    opacity: 1;
+  }
+</style>
+<div class="custom-alert-wrapper">
   {% for message in messages %}
-    <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
-      {{ message }}
+    <div class="alert custom-alert {% if 'error' in message.tags or 'danger' in message.tags %}custom-alert-danger{% elif 'success' in message.tags %}custom-alert-success{% elif 'warning' in message.tags %}custom-alert-warning{% elif 'info' in message.tags %}custom-alert-info{% else %}custom-alert-info{% endif %} alert-dismissible fade show mb-2" role="alert">
+      <div class="alert-content">
+        {% if 'success' in message.tags %}
+          <i class="bi bi-check-circle-fill fs-5 alert-icon"></i>
+        {% elif 'warning' in message.tags %}
+          <i class="bi bi-exclamation-triangle-fill fs-5 alert-icon"></i>
+        {% elif 'error' in message.tags or 'danger' in message.tags %}
+          <i class="bi bi-x-circle-fill fs-5 alert-icon"></i>
+        {% else %}
+          <i class="bi bi-info-circle-fill fs-5 alert-icon"></i>
+        {% endif %}
+        <span>{{ message }}</span>
+      </div>
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
   {% endfor %}
+</div>
 {% endif %}
