@@ -1,21 +1,237 @@
 {% extends 'app_shell.html' %}
-
+{% load static %}
 {% load crispy_forms_tags %}
+
+{% block css %}
+{{ block.super }}
+<!-- Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+    .profile-hero-card {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 1.25rem;
+    }
+    .profile-section-card {
+        border-radius: 1.25rem;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+        background-color: #ffffff;
+    }
+    .avatar-circle-lg {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+    .badge-soft-primary {
+        background-color: #dbeafe;
+        color: #1d4ed8;
+        font-weight: 600;
+        border: 1px solid #bfdbfe;
+    }
+    .badge-soft-success {
+        background-color: #dcfce7;
+        color: #15803d;
+        font-weight: 600;
+        border: 1px solid #bbf7d0;
+    }
+    .badge-soft-warning {
+        background-color: #fef3c7;
+        color: #b45309;
+        font-weight: 600;
+        border: 1px solid #fde68a;
+    }
+    .badge-soft-secondary {
+        background-color: #f1f5f9;
+        color: #475569;
+        font-weight: 600;
+        border: 1px solid #e2e8f0;
+    }
+    .badge-soft-info {
+        background-color: #e0f2fe;
+        color: #0369a1;
+        font-weight: 600;
+        border: 1px solid #bae6fd;
+    }
+    .info-list-item {
+        padding: 0.85rem 1.25rem;
+        border-bottom: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .info-list-item:last-child {
+        border-bottom: none;
+    }
+    .btn-action {
+        border-radius: 0.6rem;
+        font-weight: 500;
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        transition: all 0.2s ease;
+    }
+    .btn-action:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    .form-card-header {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: #ffffff;
+        padding: 1.25rem 1.5rem;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 
-<div class="container">
+{% with profile_obj=client %}
+<div class="container py-4">
 
-    <h2 class="mt-4">Client Details</h2>
+    <!-- Top Navigation / Back button -->
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <a href="{% url 'accounts:list_profiles' %}{% if profile_obj.is_staff %}?is_staff=true{% endif %}" class="btn btn-action btn-outline-secondary bg-white text-dark border shadow-sm">
+            <i class="bi bi-arrow-left"></i>
+            <span>Back to {% if profile_obj.is_staff %}Staff{% else %}Clients{% endif %} Directory</span>
+        </a>
+        <span class="text-muted small">Profile ID: <strong class="text-dark font-monospace">#{{ profile_obj.id }}</strong></span>
+    </div>
+
+    <!-- Hero Header Banner -->
+    <div class="profile-hero-card p-4 p-md-5 mb-4 shadow-sm position-relative overflow-hidden">
+        <div class="row align-items-center position-relative z-1">
+            <div class="col-md-8 mb-3 mb-md-0">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="avatar-circle-lg bg-primary-subtle text-primary border border-primary-subtle shadow-sm">
+                        {% if profile_obj.user.first_name %}{{ profile_obj.user.first_name|first|upper }}{% else %}U{% endif %}{% if profile_obj.user.last_name %}{{ profile_obj.user.last_name|first|upper }}{% endif %}
+                    </div>
+                    <div>
+                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                            <h1 class="h3 fw-bold text-white mb-0">
+                                {{ profile_obj.user.first_name }} {{ profile_obj.user.last_name }}
+                            </h1>
+                            {% if profile_obj.is_staff %}
+                                <span class="badge badge-soft-info rounded-pill px-2.5 py-1">
+                                    <i class="bi bi-person-badge me-1"></i>Staff
+                                </span>
+                            {% else %}
+                                <span class="badge badge-soft-primary rounded-pill px-2.5 py-1">
+                                    <i class="bi bi-person me-1"></i>Client
+                                </span>
+                            {% endif %}
+                            {% if profile_obj.is_password_set %}
+                                <span class="badge badge-soft-success rounded-pill px-2.5 py-1">
+                                    <i class="bi bi-check-circle-fill me-1"></i>Active
+                                </span>
+                            {% else %}
+                                <span class="badge badge-soft-warning rounded-pill px-2.5 py-1">
+                                    <i class="bi bi-exclamation-triangle-fill me-1"></i>Pending Password
+                                </span>
+                            {% endif %}
+                        </div>
+                        <p class="text-light mb-0 opacity-75 small">
+                            <i class="bi bi-envelope me-1"></i>{{ profile_obj.user.email }}
+                            {% if profile_obj.phone_number %}
+                                <span class="ms-3"><i class="bi bi-telephone me-1"></i>{{ profile_obj.phone_number }}</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <a href="{% url 'core:create_booking' profile_id=profile_obj.id %}" class="btn btn-action btn-success text-white shadow-sm px-3 py-2 fw-semibold">
+                    <i class="bi bi-car-front-fill fs-6"></i>
+                    <span>Book Vehicle</span>
+                </a>
+            </div>
+        </div>
+    </div>
 
     {% include 'partials/alerts.html' %}
 
-    <form method="post">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <button type="submit" class="btn btn-primary">Save Changes</button>
-    </form>
+    <div class="row g-4">
+        <!-- Left Side: Profile Summary Card -->
+        <div class="col-lg-4">
+            <div class="card profile-section-card h-100">
+                <div class="card-header bg-white py-3 px-4 border-bottom">
+                    <h5 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-person-vcard text-primary"></i> Account Summary
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="info-list-item">
+                        <span class="text-muted small"><i class="bi bi-hash me-1"></i>Account ID</span>
+                        <span class="fw-bold font-monospace text-dark">#{{ profile_obj.id }}</span>
+                    </div>
+                    <div class="info-list-item">
+                        <span class="text-muted small"><i class="bi bi-building me-1"></i>Organization</span>
+                        <span class="fw-semibold text-dark">{{ profile_obj.organization.name }}</span>
+                    </div>
+                    <div class="info-list-item">
+                        <span class="text-muted small"><i class="bi bi-shield-lock me-1"></i>Role</span>
+                        <span class="fw-semibold text-dark">
+                            {% if profile_obj.is_staff %}Staff Member{% elif profile_obj.is_admin %}Administrator{% else %}Client{% endif %}
+                        </span>
+                    </div>
+                    <div class="info-list-item">
+                        <span class="text-muted small"><i class="bi bi-key me-1"></i>Password Status</span>
+                        {% if profile_obj.is_password_set %}
+                            <span class="badge badge-soft-success rounded-pill px-2 py-0.5">Configured</span>
+                        {% else %}
+                            <span class="badge badge-soft-warning rounded-pill px-2 py-0.5">Not Set</span>
+                        {% endif %}
+                    </div>
+                    <div class="info-list-item">
+                        <span class="text-muted small"><i class="bi bi-calendar3 me-1"></i>Registered On</span>
+                        <span class="text-secondary small fw-medium">{{ profile_obj.created|date:"M d, Y"|default:profile_obj.created }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Edit Form Card -->
+        <div class="col-lg-8">
+            <div class="card profile-section-card">
+                <div class="form-card-header d-flex align-items-center justify-content-between">
+                    <h5 class="modal-title fw-bold mb-0 d-flex align-items-center gap-2">
+                        <i class="bi bi-pencil-square"></i> Edit Profile Details
+                    </h5>
+                    <span class="badge bg-white text-primary fw-semibold rounded-pill px-3 py-1 text-uppercase" style="font-size: 0.7rem;">Update Info</span>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            {{ form|crispy }}
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-end gap-2 pt-3 border-top">
+                            <a href="{% url 'accounts:list_profiles' %}{% if profile_obj.is_staff %}?is_staff=true{% endif %}" class="btn btn-action btn-light border text-dark">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-action btn-primary shadow-sm px-4">
+                                <i class="bi bi-check2-circle fs-6"></i>
+                                <span>Save Changes</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
+{% endwith %}
 
 {% endblock %}
+

@@ -138,4 +138,4 @@ class EditProfileView(LoginRequiredMixin, View):
             **form.cleaned_data,
         )
         messages.info(self.request, 'Profile updated successfully')
-        return HttpResponseRedirect(reverse_lazy('accounts:list_profiles'))
+        return HttpResponseRedirect(reverse_lazy('accounts:edit_profile', kwargs={'pk': pk}))
