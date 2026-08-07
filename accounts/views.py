@@ -67,6 +67,7 @@ class CreateUserProfileView(LoginRequiredMixin, FormView):
 class ListProfilesView(LoginRequiredMixin, ListView):
     template_name = 'accounts/profiles.html'
     context_object_name = 'profiles'
+    paginate_by = 10
 
     def _is_staff(self) -> bool:
         return self.request.GET.get('is_staff', 'false') == 'true'
