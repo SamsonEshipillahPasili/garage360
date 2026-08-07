@@ -1,125 +1,348 @@
 {% extends 'app_shell.html' %}
-
 {% load crispy_forms_tags %}
 {% load static %}
 
+{% block css %}
+{{ block.super }}
+<style>
+    .booking-detail-hero {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 1.25rem;
+    }
+    .detail-info-card, .quotation-card {
+        border-radius: 1.25rem;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+        overflow: hidden;
+    }
+    .avatar-circle-lg {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+    .quotation-card .table {
+        margin-bottom: 0;
+    }
+    .quotation-card .table thead th {
+        background-color: #f8fafc;
+        color: #64748b;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .quotation-card .table tbody td {
+        padding: 1rem 1.25rem;
+        vertical-align: middle;
+        color: #334155;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .quotation-card .table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+    .plate-badge {
+        background-color: #1e293b;
+        color: #f8fafc;
+        font-family: var(--bs-font-monospace);
+        font-size: 0.85rem;
+        padding: 0.3rem 0.75rem;
+        border-radius: 0.5rem;
+        letter-spacing: 0.05em;
+    }
+    .badge-soft-success {
+        background-color: #dcfce7;
+        color: #15803d;
+        font-weight: 600;
+        border: 1px solid #bbf7d0;
+    }
+    .badge-soft-info {
+        background-color: #e0f2fe;
+        color: #0369a1;
+        font-weight: 600;
+        border: 1px solid #bae6fd;
+    }
+    .badge-soft-warning {
+        background-color: #fef3c7;
+        color: #b45309;
+        font-weight: 600;
+        border: 1px solid #fde68a;
+    }
+    .badge-soft-danger {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        font-weight: 600;
+        border: 1px solid #fecaca;
+    }
+    .badge-soft-secondary {
+        background-color: #f1f5f9;
+        color: #475569;
+        font-weight: 600;
+        border: 1px solid #e2e8f0;
+    }
+    .modal-content-custom {
+        border-radius: 1.25rem;
+        border: none;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+    }
+    .modal-header-custom {
+        background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        color: #ffffff;
+        padding: 1.25rem 1.5rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 
-<div class="container">
+<div class="container py-4">
 
-    <h1 class="mt-4">Booking Details</h1>
-
-    {% include 'partials/alerts.html' %}
-    <h3 class="mt-4">Booking Details #{{ booking.id }}</h3>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">ID#</th>
-                <th scope="col">Booking Date</th>
-                <th scope="col">Client First Name</th>
-                <th scope="col">Client Last Name</th>
-                <th scope="col">Client Email</th>
-                <th scope="col">Client Phone</th>
-                <th scope="col">Booking State</th>
-                <th scope="col">Car Brand</th>
-                <th scope="col">Car Model</th>
-                <th scope="col">Car Number Plate</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ booking.id }}</td>
-                <td>{{ booking.booking_date }}</td>
-                <td>{{ booking.client.user.first_name }}</td>
-                <td>{{ booking.client.user.last_name }}</td>
-                <td>{{ booking.client.user.email }}</td>
-                <td>{{ booking.client.phone_number }}</td>
-                <td class="text-center">
+    <!-- Hero Header Banner -->
+    <div class="booking-detail-hero p-4 p-md-5 mb-4 shadow-sm position-relative overflow-hidden">
+        <div class="row align-items-center position-relative z-1">
+            <div class="col-md-8">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 text-uppercase fw-semibold" style="font-size: 0.725rem;">
+                        <i class="bi bi-file-earmark-text me-1"></i> Booking Overview
+                    </span>
                     {% if booking.status == 'pending' %}
-                        <span class="badge rounded-pill text-bg-secondary">
-                            {{ booking.get_status_display }}
+                        <span class="badge badge-soft-warning rounded-pill px-3 py-1">
+                            <i class="bi bi-clock-history me-1"></i>{{ booking.get_status_display }}
                         </span>
                     {% elif booking.status == 'in_progress' %}
-                        <span class="badge rounded-pill text-bg-success">
-                            {{ booking.get_status_display }}
+                        <span class="badge badge-soft-info rounded-pill px-3 py-1">
+                            <i class="bi bi-gear-fill me-1"></i>{{ booking.get_status_display }}
                         </span>
                     {% elif booking.status == 'done' %}
-                        <span class="badge rounded-pill text-bg-success">
-                            {{ booking.get_status_display }}
+                        <span class="badge badge-soft-success rounded-pill px-3 py-1">
+                            <i class="bi bi-check-circle-fill me-1"></i>{{ booking.get_status_display }}
                         </span>
                     {% else %}
-                        <span class="badge rounded-pill text-bg-danger">
-                            {{ booking.get_status_display }}
+                        <span class="badge badge-soft-danger rounded-pill px-3 py-1">
+                            <i class="bi bi-x-circle-fill me-1"></i>{{ booking.get_status_display }}
                         </span>
                     {% endif %}
-                </td>
-                <td>{{ booking.car_brand }}</td>
-                <td>{{ booking.car_model }}</td>
-                <td>{{ booking.car_number_plate }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-
-    <h3 class="mt-4">Quotation</h3>
-    <div>
-        <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#add-client-modal">Add Quotation Item</button>
-        </div>
-        <div class="modal fade" id="add-client-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Quotation Item</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              
-              {% include 'core/quotation_line_form.html' %}
-              
+                </div>
+                <h1 class="h2 fw-bold text-white mb-2">
+                    <i class="bi bi-receipt text-primary me-2"></i>Booking Details <span class="text-primary font-monospace">#{{ booking.id }}</span>
+                </h1>
+                <p class="text-light mb-0 opacity-75" style="max-width: 580px;">
+                    Scheduled on <i class="bi bi-calendar3 me-1"></i>{{ booking.booking_date }} for {{ booking.client.user.first_name }} {{ booking.client.user.last_name }}.
+                </p>
             </div>
-          </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="{% url 'core:list_bookings' %}" class="btn btn-outline-light rounded-3 px-3.5 py-2 fw-semibold d-inline-flex align-items-center gap-2">
+                    <i class="bi bi-arrow-left"></i>
+                    <span>Back to Bookings</span>
+                </a>
+            </div>
         </div>
     </div>
 
-    
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">Description</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Unit Price</th>
-                <th scope="col">Total Price</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% if quotation_lines|length == 0  %}
-            <tr>
-                <td colspan="4" class="text-center">No lines found</td>
-            </tr>
-        {% endif %}
+    {% include 'partials/alerts.html' %}
 
-        {% for line in quotation_lines %}
-            <tr>
-                <td>{{ line.description }}</td>
-                <td>{{ line.quantity }}</td>
-                <td>USD {{ line.unit_price }}</td>
-                <td class="d-flex justify-content-between">
-                    <span>USD {{ line.total_price }}</span>
-                    <form method="post" action="{% url 'core:delete_quotation_line' line_id=line.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-        <tr>
-            <td colspan="3" class="text-end fw-bold">Total Price</td>
-            <td class="fw-bolder text-danger">
-                USD {{ booking.quotation.total_price }}
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <!-- Overview Grid Cards -->
+    <div class="row g-4 mb-4">
+        <!-- Client Info Card -->
+        <div class="col-md-6">
+            <div class="card detail-info-card h-100 bg-white">
+                <div class="card-header bg-white py-3 px-4 border-bottom">
+                    <h5 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-person-circle text-primary"></i>
+                        <span>Client Information</span>
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="avatar-circle-lg bg-primary-subtle text-primary border border-primary-subtle">
+                            {% if booking.client.user.first_name %}{{ booking.client.user.first_name|first|upper }}{% else %}C{% endif %}{% if booking.client.user.last_name %}{{ booking.client.user.last_name|first|upper }}{% endif %}
+                        </div>
+                        <div>
+                            <h5 class="fw-bold mb-1 text-dark">{{ booking.client.user.first_name }} {{ booking.client.user.last_name }}</h5>
+                            <span class="badge badge-soft-secondary font-monospace">Client ID #{{ booking.client.id }}</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column gap-3">
+                        <div class="p-3 bg-light rounded-3 d-flex align-items-center gap-3">
+                            <i class="bi bi-envelope text-primary fs-5"></i>
+                            <div class="overflow-hidden">
+                                <small class="text-muted d-block" style="font-size: 0.75rem;">Email Address</small>
+                                <span class="fw-semibold text-dark text-truncate d-block">{{ booking.client.user.email|default:"Not provided" }}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-light rounded-3 d-flex align-items-center gap-3">
+                            <i class="bi bi-telephone text-primary fs-5"></i>
+                            <div>
+                                <small class="text-muted d-block" style="font-size: 0.75rem;">Phone Number</small>
+                                <span class="fw-semibold text-dark">{{ booking.client.phone_number|default:"Not provided" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vehicle & Booking Info Card -->
+        <div class="col-md-6">
+            <div class="card detail-info-card h-100 bg-white">
+                <div class="card-header bg-white py-3 px-4 border-bottom">
+                    <h5 class="fw-bold mb-0 text-dark d-flex align-items-center gap-2">
+                        <i class="bi bi-car-front-fill text-primary"></i>
+                        <span>Vehicle & Booking Info</span>
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="bi bi-car-front text-primary fs-4"></i>
+                                <div>
+                                    <small class="text-muted d-block" style="font-size: 0.75rem;">Vehicle Model</small>
+                                    <span class="fw-bold text-dark fs-6">{{ booking.car_brand }} {{ booking.car_model }}</span>
+                                </div>
+                            </div>
+                            <span class="plate-badge">{{ booking.car_number_plate }}</span>
+                        </div>
+
+                        <div class="p-3 bg-light rounded-3 d-flex align-items-center gap-3">
+                            <i class="bi bi-calendar-event text-primary fs-5"></i>
+                            <div>
+                                <small class="text-muted d-block" style="font-size: 0.75rem;">Booking Date</small>
+                                <span class="fw-semibold text-dark">{{ booking.booking_date }}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-light rounded-3 d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                <i class="bi bi-info-circle text-primary fs-5"></i>
+                                <div>
+                                    <small class="text-muted d-block" style="font-size: 0.75rem;">Current Status</small>
+                                    <span class="fw-semibold text-dark">{{ booking.get_status_display }}</span>
+                                </div>
+                            </div>
+                            {% if booking.status == 'pending' %}
+                                <span class="badge badge-soft-warning rounded-pill px-2.5 py-1">Pending</span>
+                            {% elif booking.status == 'in_progress' %}
+                                <span class="badge badge-soft-info rounded-pill px-2.5 py-1">In Progress</span>
+                            {% elif booking.status == 'done' %}
+                                <span class="badge badge-soft-success rounded-pill px-2.5 py-1">Completed</span>
+                            {% else %}
+                                <span class="badge badge-soft-danger rounded-pill px-2.5 py-1">Cancelled</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Adding Quotation Item -->
+    <div class="modal fade" id="add-client-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-custom">
+          <div class="modal-header modal-header-custom">
+            <h5 class="modal-title fw-bold d-flex align-items-center gap-2" id="exampleModalLabel">
+                <i class="bi bi-plus-circle-fill"></i> Add Quotation Item
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          
+          {% include 'core/quotation_line_form.html' %}
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Quotation Table Card -->
+    <div class="card quotation-card mb-4 bg-white">
+        <div class="card-header bg-white py-3 px-4 border-bottom d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <h5 class="fw-bold mb-0 text-dark">Quotation Items</h5>
+                <span class="badge badge-soft-secondary rounded-pill px-2.5 py-1">{{ quotation_lines|length }} item{% if quotation_lines|length != 1 %}s{% endif %}</span>
+            </div>
+            <button class="btn btn-primary rounded-3 px-3.5 py-2 fw-semibold d-inline-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal" data-bs-target="#add-client-modal">
+                <i class="bi bi-plus-lg"></i>
+                <span>Add Quotation Item</span>
+            </button>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-nowrap">Description</th>
+                        <th scope="col" class="text-nowrap">Quantity</th>
+                        <th scope="col" class="text-nowrap">Unit Price</th>
+                        <th scope="col" class="text-nowrap text-end">Total Price & Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for line in quotation_lines %}
+                    <tr>
+                        <td>
+                            <div class="fw-semibold text-dark">{{ line.description }}</div>
+                        </td>
+                        <td class="text-nowrap">
+                            <span class="badge badge-soft-secondary rounded-pill px-2.5 py-1">{{ line.quantity }}</span>
+                        </td>
+                        <td class="text-nowrap fw-semibold text-dark">
+                            USD {{ line.unit_price }}
+                        </td>
+                        <td class="text-nowrap text-end">
+                            <div class="d-inline-flex align-items-center gap-3">
+                                <span class="fw-bold text-dark fs-6">USD {{ line.total_price }}</span>
+                                <form method="post" action="{% url 'core:delete_quotation_line' line_id=line.id %}" class="d-inline m-0">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-2 d-inline-flex align-items-center gap-1" title="Delete Item">
+                                        <i class="bi bi-trash3-fill"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5">
+                            <div class="py-4">
+                                <i class="bi bi-receipt text-muted opacity-50 display-4 d-block mb-3"></i>
+                                <h6 class="fw-semibold text-secondary">No Quotation Items Found</h6>
+                                <p class="text-muted small mb-3">Click the button below to add your first line item to this booking quotation.</p>
+                                <button class="btn btn-sm btn-primary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#add-client-modal">
+                                    <i class="bi bi-plus-lg me-1"></i>Add Item
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                {% if quotation_lines|length > 0 %}
+                <tfoot class="border-top bg-light">
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold text-uppercase text-secondary pe-3" style="font-size: 0.825rem; letter-spacing: 0.05em;">
+                            Quotation Total
+                        </td>
+                        <td class="text-end py-3">
+                            <span class="badge bg-primary fs-6 px-3 py-2 fw-bold text-white shadow-sm">
+                                USD {{ booking.quotation.total_price }}
+                            </span>
+                        </td>
+                    </tr>
+                </tfoot>
+                {% endif %}
+            </table>
+        </div>
+    </div>
 
 </div>
 
@@ -128,3 +351,4 @@
 {% block js %}
     <script src="{% static 'core/js/booking.js' %}"></script>
 {% endblock %}
+
