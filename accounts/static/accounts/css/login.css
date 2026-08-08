@@ -1,4 +1,95 @@
-.login-container {
-    width: 400px;
-    margin: 0 auto;
+.login-wrapper {
+    min-height: calc(100vh - 140px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.login-card-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    position: relative;
+}
+
+.login-card-header h2 {
+    color: #0f172a;
+}
+
+.login-card-header p {
+    color: #64748b;
+}
+
+.login-brand-icon {
+    width: 54px;
+    height: 54px;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    color: #ffffff;
+    border-radius: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+.login-card .card-body {
+    background-color: #ffffff;
+}
+
+.login-card label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #334155;
+    margin-bottom: 0.4rem;
+}
+
+.login-card .form-control {
+    border-radius: 0.75rem;
+    padding: 0.65rem 0.9rem;
+    border: 1px solid #cbd5e1;
+    background-color: #f8fafc;
+    font-size: 0.925rem;
+    transition: all 0.2s ease;
+}
+
+.login-card .form-control:focus {
+    background-color: #ffffff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.login-card .btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.01em;
+    width: 100%;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+}
+
+.login-card .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+.login-card .btn-primary:active {
+    transform: translateY(0);
+}
+
+.login-card .card-footer {
+    border-top: 1px solid #f1f5f9 !important;
+    background-color: #f8fafc !important;
 }
