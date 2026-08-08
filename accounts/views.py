@@ -83,7 +83,7 @@ class ListProfilesView(LoginRequiredMixin, ListView):
                 organization=self.request.user.profile.organization
             )
             .select_related('user')
-            .all()
+            .all().order_by('-created')
         )
 
     def get_context_data(self, **kwargs):
